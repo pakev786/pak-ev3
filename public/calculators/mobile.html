@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pak EV Watt Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: transparent;
+            color: #374151;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .calculator {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .calculator-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 500;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .section {
+            margin-bottom: 15px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background-color: #fff;
+        }
+
+        .appliance-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+        }
+
+        .appliance-row select {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .appliance-row input {
+            width: 80px;
+        }
+
+        .time-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-left: 10px;
+        }
+
+        .time-row select {
+            width: 100px;
+        }
+
+        .time-row .total-line {
+            margin-left: auto;
+            font-weight: 500;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 4px;
+            min-width: 120px;
+        }
+
+        select, input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+
+        select:hover, input:hover {
+            border-color: #aaa;
+        }
+
+        select:focus, input:focus {
+            border-color: #4a90e2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+        }
+
+        .total-line {
+            padding: 8px 12px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            min-width: 150px;
+        }
+
+        input {
+            flex: 1;
+            width: 50px;
+            text-align: center;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+
+        .total-line {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: right;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .grand-total-section {
+            background: #2c3e50;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .grand-total-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        #grandTotal {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .grand-total-watts {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .grand-total-kw {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        .battery-section {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            margin-bottom: 150px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background-color: #fff;
+            border-left: 4px solid #3498db;
+        }
+
+        .battery-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+        }
+
+        .battery-select {
+            flex: 1;
+            min-width: 200px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+
+        .battery-select:hover {
+            border-color: #aaa;
+        }
+
+        .battery-select:focus {
+            border-color: #4a90e2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+        }
+
+        .battery-result {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: right;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-left: auto;
+        }
+
+        /* Section colors */
+        .fan-section { border-left: 4px solid #3498db; }
+        .ledbulb-section { border-left: 4px solid #2ecc71; }
+        .tv-section { border-left: 4px solid #e74c3c; }
+        .fridge-section { border-left: 4px solid #9b59b6; }
+        .washing-section { border-left: 4px solid #f1c40f; }
+        .pump-section { border-left: 4px solid #16a085; }
+        .computer-section { border-left: 4px solid #2980b9; }
+        .iron-section { border-left: 4px solid #e67e22; }
+        .splitac-section { border-left: 4px solid #27ae60; }
+        .inverterac-section { border-left: 4px solid #8e44ad; }
+        .laptop-section { border-left: 4px solid #d35400; }
+        .microwave-section { border-left: 4px solid #c0392b; }
+        .other-section { border-left: 4px solid #7f8c8d; }
+
+        /* Media Queries */
+        @media (min-width: 768px) {
+            .calculator-title {
+                font-size: 2em;
+            }
+
+            input {
+                flex: 0 0 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+
+        <div class="section fan-section">
+            <div class="appliance-row">
+                <select id="fanType" aria-label="Fan type">
+                    <option value="select">--Select Fan--</option>
+                    <option value="inverter">Inverter Fan</option>
+                    <option value="acdc">AC/DC Fan</option>
+                    <option value="ac">AC Fan</option>
+                </select>
+                <input type="number" id="fanCount" value="0" min="0" aria-label="Number of fans" title="Enter number of fans" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="fanTime" aria-label="Fan usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section ledbulb-section">
+            <div class="appliance-row">
+                <select id="ledbulbType" aria-label="Light type" title="Select light type">
+                    <option value="select">--Select Light--</option>
+                    <option value="5w">5W LED</option>
+                    <option value="9w">9W LED</option>
+                    <option value="12w">12W LED</option>
+                    <option value="15w">15W LED</option>
+                    <option value="18w">18W LED</option>
+                    <option value="36w">36W Tubelight</option>
+                    <option value="40w">40W Tubelight</option>
+                    <option value="60w">60W Tubelight</option>
+                </select>
+                <input type="number" id="ledbulbCount" value="0" min="0" aria-label="Number of lights" title="Enter number of lights" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="ledbulbTime" aria-label="Light usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section tv-section">
+            <div class="appliance-row">
+                <select id="tvType" aria-label="TV type" title="Select TV type">
+                    <option value="select">--Select TV--</option>
+                    <option value="32inch">32 Inch TV</option>
+                    <option value="40inch">40 Inch TV</option>
+                    <option value="55inch">55 Inch TV</option>
+                    <option value="65inch">65 Inch TV</option>
+                    <option value="75inch">75 Inch TV</option>
+                </select>
+                <input type="number" id="tvCount" value="0" min="0" aria-label="Number of TVs" title="Enter number of TVs" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="tvTime" aria-label="TV usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section fridge-section">
+            <div class="appliance-row">
+                <select id="fridgeType" aria-label="Refrigerator type" title="Select refrigerator type">
+                    <option value="select">--Select Refrigerator--</option>
+                    <option value="small">Small Inverter</option>
+                    <option value="medium">Medium Inverter</option>
+                    <option value="large">Large Inverter</option>
+                    <option value="small ac">Small AC</option>
+                    <option value="medium ac">Medium AC</option>
+                    <option value="large ac">Large AC</option>
+                </select>
+                <input type="number" id="fridgeCount" value="0" min="0" aria-label="Number of refrigerators" title="Enter number of refrigerators" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="fridgeTime" aria-label="Refrigerator usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section washing-section">
+            <div class="appliance-row">
+                <select id="washingType" aria-label="Washing machine type" title="Select washing machine type">
+                    <option value="select">--Select Washing Machine--</option>
+                    <option value="6kg">6 KG</option>
+                    <option value="7kg">7 KG</option>
+                    <option value="8kg">8 KG</option>
+                </select>
+                <input type="number" id="washingCount" value="0" min="0" aria-label="Number of washing machines" title="Enter number of washing machines" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="washingTime" aria-label="Washing machine usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section pump-section">
+            <div class="appliance-row">
+                <select id="pumpType" aria-label="Water pump type" title="Select water pump type">
+                    <option value="select">--Select Water Pump--</option>
+                    <option value="0.5hp">0.5 HP Pump</option>
+                    <option value="1hp">1 HP Pump</option>
+                    <option value="1.5hp">1.5 HP Pump</option>
+                </select>
+                <input type="number" id="pumpCount" value="0" min="0" aria-label="Number of water pumps" title="Enter number of water pumps" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="pumpTime" aria-label="Water pump usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section computer-section">
+            <div class="appliance-row">
+                <select id="computerType" aria-label="Computer type" title="Select computer type">
+                    <option value="select">--Select Computer--</option>
+                    <option value="basic">Basic PC</option>
+                    <option value="gaming">Gaming PC</option>
+                    <option value="high">High-End PC</option>
+                </select>
+                <input type="number" id="computerCount" value="0" min="0" aria-label="Number of computers" title="Enter number of computers" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="computerTime" aria-label="Computer usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section iron-section">
+            <div class="appliance-row">
+                <select id="ironType" aria-label="Iron type" title="Select iron type">
+                    <option value="select">--Select Iron--</option>
+                    <option value="iron750">Small Iron</option>
+                    <option value="iron1000">Medium Iron</option>
+                    <option value="iron1500">Large Iron</option>
+                </select>
+                <input type="number" id="ironCount" value="0" min="0" aria-label="Number of irons" title="Enter number of irons" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="ironTime" aria-label="Iron usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section splitac-section">
+            <div class="appliance-row">
+                <select id="splitacType" aria-label="Split AC type" title="Select split AC type">
+                    <option value="select">--Select Split AC--</option>
+                    <option value="split1ton">1 Ton Split AC</option>
+                    <option value="split1.5ton">1.5 Ton Split AC</option>
+                    <option value="split2ton">2 Ton Split AC</option>
+                </select>
+                <input type="number" id="splitacCount" value="0" min="0" aria-label="Number of split ACs" title="Enter number of split ACs" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="splitacTime" aria-label="Split AC usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section inverterac-section">
+            <div class="appliance-row">
+                <select id="inverteracType" aria-label="Inverter AC type" title="Select inverter AC type">
+                    <option value="select">--Select Inverter AC--</option>
+                    <option value="inverter1ton">1 Ton Inverter AC</option>
+                    <option value="inverter1.5ton">1.5 Ton Inverter AC</option>
+                    <option value="inverter2ton">2 Ton Inverter AC</option>
+                </select>
+                <input type="number" id="inverteracCount" value="0" min="0" aria-label="Number of inverter ACs" title="Enter number of inverter ACs" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="inverteracTime" aria-label="Inverter AC usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section laptop-section">
+            <div class="appliance-row">
+                <select id="laptopType" aria-label="Laptop type" title="Select laptop type">
+                    <option value="select">--Select Laptop--</option>
+                    <option value="standard">Standard Laptop</option>
+                    <option value="gaming">Gaming Laptop</option>
+                    <option value="workstation">Workstation Laptop</option>
+                </select>
+                <input type="number" id="laptopCount" value="0" min="0" max="99" aria-label="Number of laptops" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="laptopTime" aria-label="Laptop usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section microwave-section">
+            <div class="appliance-row">
+                <select id="microwaveType" aria-label="Microwave type" title="Select microwave type">
+                    <option value="select">--Select Microwave--</option>
+                    <option value="20l">20L Microwave</option>
+                    <option value="25l">25L Microwave</option>
+                    <option value="30l">30L Microwave</option>
+                </select>
+                <input type="number" id="microwaveCount" value="0" min="0" max="99" aria-label="Number of microwaves" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="microwaveTime" aria-label="Microwave usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section other-section">
+            <div class="appliance-row">
+                <select id="otherType" aria-label="Other load type" title="Select other load type">
+                    <option value="select">--Select Other Load--</option>
+                    <option value="small 100w">Small Load (100W)</option>
+                    <option value="medium 500w">Medium Load (500W)</option>
+                    <option value="large 1000w">Large Load (1000W)</option>
+                </select>
+                <input type="number" id="otherCount" value="0" min="0" aria-label="Number of other loads" title="Enter number of other loads" placeholder="Qty">
+            </div>
+            <div class="time-row">
+                <select id="otherTime" aria-label="Other load usage time" title="Select usage time">
+                    <option value="0.016666667">1 Min</option>
+                    <option value="0.033333333">2 Min</option>
+                    <option value="0.083333333">5 Min</option>
+                    <option value="0.166666667">10 Min</option>
+                    <option value="0.25">15 Min</option>
+                    <option value="0.5">30 Min</option>
+                    <option value="0.75">45 Min</option>
+                    <option value="1">1 Hr</option>
+                    <option value="2">2 Hrs</option>
+                    <option value="3">3 Hrs</option>
+                    <option value="4">4 Hrs</option>
+                    <option value="5">5 Hrs</option>
+                    <option value="6">6 Hrs</option>
+                    <option value="8">8 Hrs</option>
+                    <option value="10">10 Hrs</option>
+                    <option value="12">12 Hrs</option>
+                    <option value="14">14 Hrs</option>
+                    <option value="16">16 Hrs</option>
+                    <option value="18">18 Hrs</option>
+                    <option value="20">20 Hrs</option>
+                    <option value="24">24 Hrs</option>
+                </select>
+                <div class="total-line">0 Watts</div>
+            </div>
+        </div>
+
+        <div class="section grand-total-section">
+            <div class="grand-total">
+                <div class="grand-total-title">Total Power Consumption</div>
+                <div id="grandTotal">
+                    <div class="grand-total-watts">0 Watts</div>
+                    <div class="grand-total-kw">0.00 kW</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const APPLIANCE_WATTAGES = {
+            // Iron wattages
+            'iron750': 750,
+            'iron1000': 1000,
+            'iron1500': 1500,
+            // Split AC wattages
+            'split1ton': 1200,
+            'split1.5ton': 1800,
+            'split2ton': 2400,
+            // Inverter AC wattages
+            'inverter1ton': 1000,
+            'inverter1.5ton': 1500,
+            'inverter2ton': 2000,
+            // Laptop wattages
+            'standard': 65,
+            'gaming': 180,
+            'workstation': 230,
+            // Microwave wattages
+            '20l': 800,
+            '25l': 900,
+            '30l': 1000,
+            // Existing wattages
+            'select': 0,
+            'inverter': 50,
+            'acdc': 50,
+            'ac': 100,
+            '5w': 5,
+            '9w': 9,
+            '12w': 12,
+            '15w': 15,
+            '18w': 18,
+            '36w': 36,
+            '40w': 40,
+            '60w': 60,
+            '32inch': 50,
+            '40inch': 60,
+            '55inch': 80,
+            '65inch': 100,
+            '75inch': 120,
+            'small': 100,
+            'medium': 200,
+            'large': 350,
+            'small ac': 200,
+            'medium ac': 300,
+            'large ac': 500,
+            '6kg': 400,
+            '7kg': 500,
+            '8kg': 600,
+            '0.5hp': 750,
+            '1hp': 1000,
+            '1.5hp': 1500,
+            'basic': 500,
+            'gaming': 1000,
+            'high': 1500,
+            'small 100w': 100,
+            'medium 500w': 500,
+            'large 1000w': 1000
+        };
+
+        function calculateTotal(section) {
+            const typeSelect = document.getElementById(`${section}Type`);
+            const countInput = document.getElementById(`${section}Count`);
+            const timeSelect = document.getElementById(`${section}Time`);
+            
+            if (!typeSelect || !countInput || !timeSelect) return;
+            
+            const selectedType = typeSelect.value;
+            const count = parseInt(countInput.value) || 0;
+            const hours = parseFloat(timeSelect.value) || 1;
+            const wattage = APPLIANCE_WATTAGES[selectedType];
+            const total = wattage * count;
+            const dailyConsumption = total * hours;
+            const dailyKwh = (dailyConsumption / 1000).toFixed(2);
+            
+            const totalLine = typeSelect.closest('.section').querySelector('.total-line');
+            if (totalLine) {
+                totalLine.textContent = `${total} Watts (${dailyKwh} kWh/day)`;
+            }
+            
+            updateGrandTotal();
+        }
+
+        function updateGrandTotal() {
+            let totalWatts = 0;
+            
+            const sections = [
+                'fan', 'ledbulb', 'tv', 'fridge', 'washing',
+                'pump', 'computer', 'iron', 'splitac', 'inverterac',
+                'laptop', 'microwave', 'other'
+            ];
+            
+            let totalDailyKwh = 0;
+            sections.forEach(section => {
+                const typeSelect = document.getElementById(`${section}Type`);
+                const countInput = document.getElementById(`${section}Count`);
+                const timeSelect = document.getElementById(`${section}Time`);
+                
+                if (typeSelect && countInput && timeSelect) {
+                    const selectedType = typeSelect.value;
+                    const count = parseInt(countInput.value) || 0;
+                    const hours = parseFloat(timeSelect.value) || 1;
+                    const wattage = APPLIANCE_WATTAGES[selectedType];
+                    const total = wattage * count;
+                    totalWatts += total;
+                    totalDailyKwh += (total * hours) / 1000;
+                }
+            });
+            
+            const grandTotalWatts = document.querySelector('.grand-total-watts');
+            const grandTotalKW = document.querySelector('.grand-total-kw');
+            
+            if (grandTotalWatts && grandTotalKW) {
+                grandTotalWatts.textContent = `${totalWatts} Watts`;
+                grandTotalKW.textContent = `${totalDailyKwh.toFixed(2)} kWh/day`;
+            }
+            
+            // Update battery suggestion
+            updateBatterySuggestion(totalWatts);
+        }
+
+        function updateBatterySuggestion(totalWatts) {
+            const voltageSelect = document.getElementById('batteryVoltage');
+            const resultDiv = document.getElementById('batteryResult');
+            const kwhPerDay = parseFloat(document.querySelector('.grand-total-kw').textContent);
+            
+            if (!voltageSelect || !resultDiv) return;
+            
+            const voltage = parseInt(voltageSelect.value);
+            if (!voltage) {
+                resultDiv.textContent = 'Please select battery voltage';
+                return;
+            }
+            
+            // Convert kWh to Wh (multiply by 1000)
+            const whPerDay = kwhPerDay * 1000;
+            // Calculate Amp-hours by dividing Wh by voltage
+            const amphours = (whPerDay / voltage) * 1.2; // Adding 20% safety margin
+            
+            resultDiv.textContent = `Recommended Battery: ${Math.ceil(amphours)}Ah ${voltage}V`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = [
+                'fan', 'ledbulb', 'tv', 'fridge', 'washing',
+                'pump', 'computer', 'iron', 'splitac', 'inverterac',
+                'laptop', 'microwave', 'other'
+            ];
+
+            sections.forEach(section => {
+                const typeSelect = document.getElementById(`${section}Type`);
+                const countInput = document.getElementById(`${section}Count`);
+                const timeSelect = document.getElementById(`${section}Time`);
+                if (typeSelect) typeSelect.addEventListener('change', () => calculateTotal(section));
+                if (countInput) countInput.addEventListener('input', () => calculateTotal(section));
+                if (timeSelect) timeSelect.addEventListener('change', () => calculateTotal(section));
+            });
+        });
+    </script>
+        <!-- Battery Suggestion Section -->
+        <div class="section battery-section">
+            <div class="battery-controls">
+                <select id="batteryVoltage" class="battery-select" aria-label="Battery voltage" title="Select battery voltage" onchange="updateBatterySuggestion(document.querySelector('.grand-total-watts').textContent.split(' ')[0])">
+                    <option value="">--Select Battery Voltage--</option>
+                    <option value="12">12V Battery</option>
+                    <option value="24">24V Battery</option>
+                    <option value="48">48V Battery</option>
+                    <option value="72">72V Battery</option>
+                </select>
+            </div>
+            <div id="batteryResult" class="battery-result">Please select battery voltage</div>
+        </div>
+    </body>
+</html>

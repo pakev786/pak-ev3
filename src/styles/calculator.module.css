@@ -1,0 +1,11 @@
+.container {
+  flex: 1;
+  height: calc(100vh - 64px);
+}
+
+.frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background-color: transparent;
+}

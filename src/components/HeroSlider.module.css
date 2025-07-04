@@ -1,0 +1,60 @@
+.fade {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.slideLeft {
+  transform: translateX(100%);
+  animation: slideLeftIn 1s forwards;
+}
+@keyframes slideLeftIn {
+  to { transform: translateX(0); }
+}
+
+.slideRight {
+  transform: translateX(-100%);
+  animation: slideRightIn 1s forwards;
+}
+@keyframes slideRightIn {
+  to { transform: translateX(0); }
+}
+
+.flip {
+  transform: rotateY(90deg);
+  animation: flipIn 1s forwards;
+}
+@keyframes flipIn {
+  to { transform: rotateY(0); }
+}
+
+.box {
+  transform: scale(0.1) rotate(0deg);
+  border-radius: 2rem;
+  animation: boxIn 1s forwards;
+}
+@keyframes boxIn {
+  to {
+    transform: scale(1) rotate(360deg);
+    border-radius: 0;
+  }
+}
+
+.pieces {
+  animation: piecesIn 1s forwards;
+}
+@keyframes piecesIn {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+    opacity: 0;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "cssImports": {
+    "G:\\Web\\Pak EV\\src\\app\\page.tsx": [
+      "G:\\Web\\Pak EV\\src\\components\\HeroSlider.module.css"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\layout.tsx": [
+      "G:\\Web\\Pak EV\\node_modules\\next\\font\\google\\target.css?{\"path\":\"src\\\\app\\\\layout.tsx\",\"import\":\"Inter\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"inter\"}",
+      "G:\\Web\\Pak EV\\src\\app\\globals.css"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\posts\\[id]\\page.tsx": [
+      "G:\\Web\\Pak EV\\src\\components\\StickyHeadingBar.module.css"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\branches\\page.tsx": [
+      "G:\\Web\\Pak EV\\src\\components\\StickyHeadingBar.module.css"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\ev-parts\\page.tsx": [
+      "G:\\Web\\Pak EV\\src\\components\\StickyHeadingBar.module.css"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\ev-kits\\page.tsx": [
+      "G:\\Web\\Pak EV\\src\\components\\StickyHeadingBar.module.css"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\triride\\page.tsx": [
+      "G:\\Web\\Pak EV\\src\\components\\StickyHeadingBar.module.css"
+    ]
+  },
+  "cssModules": {
+    "G:\\Web\\Pak EV\\src\\app\\page": [
+      "G:\\Web\\Pak EV\\src\\app\\globals.css",
+      "G:\\Web\\Pak EV\\node_modules\\next\\font\\google\\target.css?{\"path\":\"src\\\\app\\\\layout.tsx\",\"import\":\"Inter\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"inter\"}",
+      "G:\\Web\\Pak EV\\src\\components\\HeroSlider.module.css"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\cart\\page": [
+      "G:\\Web\\Pak EV\\src\\app\\globals.css",
+      "G:\\Web\\Pak EV\\node_modules\\next\\font\\google\\target.css?{\"path\":\"src\\\\app\\\\layout.tsx\",\"import\":\"Inter\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"inter\"}"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\posts\\[id]\\page": [
+      "G:\\Web\\Pak EV\\src\\app\\globals.css",
+      "G:\\Web\\Pak EV\\node_modules\\next\\font\\google\\target.css?{\"path\":\"src\\\\app\\\\layout.tsx\",\"import\":\"Inter\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"inter\"}",
+      "G:\\Web\\Pak EV\\src\\components\\StickyHeadingBar.module.css"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\branches\\page": [
+      "G:\\Web\\Pak EV\\src\\app\\globals.css",
+      "G:\\Web\\Pak EV\\node_modules\\next\\font\\google\\target.css?{\"path\":\"src\\\\app\\\\layout.tsx\",\"import\":\"Inter\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"inter\"}",
+      "G:\\Web\\Pak EV\\src\\components\\StickyHeadingBar.module.css"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\ev-parts\\page": [
+      "G:\\Web\\Pak EV\\src\\app\\globals.css",
+      "G:\\Web\\Pak EV\\node_modules\\next\\font\\google\\target.css?{\"path\":\"src\\\\app\\\\layout.tsx\",\"import\":\"Inter\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"inter\"}",
+      "G:\\Web\\Pak EV\\src\\components\\StickyHeadingBar.module.css"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\ev-kits\\page": [
+      "G:\\Web\\Pak EV\\src\\app\\globals.css",
+      "G:\\Web\\Pak EV\\node_modules\\next\\font\\google\\target.css?{\"path\":\"src\\\\app\\\\layout.tsx\",\"import\":\"Inter\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"inter\"}",
+      "G:\\Web\\Pak EV\\src\\components\\StickyHeadingBar.module.css"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\blog\\triride-success-stories\\page": [
+      "G:\\Web\\Pak EV\\src\\app\\globals.css",
+      "G:\\Web\\Pak EV\\node_modules\\next\\font\\google\\target.css?{\"path\":\"src\\\\app\\\\layout.tsx\",\"import\":\"Inter\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"inter\"}"
+    ],
+    "G:\\Web\\Pak EV\\src\\app\\triride\\page": [
+      "G:\\Web\\Pak EV\\src\\app\\globals.css",
+      "G:\\Web\\Pak EV\\node_modules\\next\\font\\google\\target.css?{\"path\":\"src\\\\app\\\\layout.tsx\",\"import\":\"Inter\",\"arguments\":[{\"subsets\":[\"latin\"]}],\"variableName\":\"inter\"}",
+      "G:\\Web\\Pak EV\\src\\components\\StickyHeadingBar.module.css"
+    ]
+  }
+}

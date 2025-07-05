@@ -24,7 +24,7 @@ export default function EditBranchPage() {
   const { id } = params;
   const { data: session, status } = useSession();
 
-  const [branch, setBranch] = useState<BranchFormData | null>(null);
+  const [branch, setBranch] = useState<Branch | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

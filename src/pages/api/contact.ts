@@ -4,6 +4,14 @@ import path from 'path';
 
 const filePath = path.join(process.cwd(), 'src/data/contact.json');
 
+type ContactData = {
+  email: string;
+  phone: string;
+  facebook?: string;
+  youtube?: string;
+  instagram?: string;
+};
+
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {
@@ -18,7 +26,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       res.status(400).json({ error: 'Invalid input' });
       return;
     }
-    const dataToSave = { email, phone };
+    const dataToSave: ContactData = { email, phone };
     if (facebook) dataToSave.facebook = facebook;
     if (youtube) dataToSave.youtube = youtube;
     if (instagram) dataToSave.instagram = instagram;

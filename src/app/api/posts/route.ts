@@ -5,7 +5,7 @@ import { getMongoClient } from '../../lib/mongodb';
 export async function GET(request: Request) {
   try {
     console.log('GET /api/posts - Fetching posts');
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db('pakev');
     const collection = db.collection('posts');
 
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
     }
 
     console.log('Connecting to MongoDB...');
-    const client = await clientPromise;
+    const client = await getMongoClient();
     console.log('Connected to MongoDB successfully');
 
     const db = client.db('pakev');

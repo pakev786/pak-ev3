@@ -4,7 +4,7 @@ import { getMongoClient } from '../../../lib/mongodb';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db('pakev');
     const collection = db.collection('posts');
     
@@ -22,7 +22,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
     const body = await request.json();
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db('pakev');
     const collection = db.collection('posts');
     
@@ -51,7 +51,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db('pakev');
     const posts = db.collection('posts');
 

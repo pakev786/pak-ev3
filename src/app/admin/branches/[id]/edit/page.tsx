@@ -20,9 +20,10 @@ type BranchFormData = Omit<Branch, 'id'>;
 
 export default function EditBranchPage() {
   const router = useRouter();
-  // Robust id extraction from useParams
+  // Robust id extraction from useParams (fixed by Cascade)
   const params = useParams();
-  const id = params.id;
+  let id = params && typeof params === "object" ? params.id : undefined;
+  if (Array.isArray(id)) id = id[0];
 
   const { data: session, status } = useSession();
 

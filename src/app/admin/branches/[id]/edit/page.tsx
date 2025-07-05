@@ -21,7 +21,7 @@ type BranchFormData = Omit<Branch, 'id'>;
 export default function EditBranchPage() {
   const router = useRouter();
   const params = useParams();
-  const { id } = params;
+  const id = params?.id as string;
   const { data: session, status } = useSession();
 
   const [branch, setBranch] = useState<Branch | null>(null);

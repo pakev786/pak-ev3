@@ -49,7 +49,7 @@ const Header = () => {
         <div className="flex items-center py-4 justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 whitespace-nowrap">
-  <span className="text-2xl md:text-3xl font-bold text-primary" style={{fontFamily: 'inherit', letterSpacing: '0.5px'}}>Pak EV</span>
+  <span className="text-[1.7rem] md:text-3xl font-bold text-primary tracking-wide leading-tight" style={{fontFamily: 'inherit', letterSpacing: '0.5px', whiteSpace: 'nowrap'}}>Pak EV</span>
 </Link>
           <span style={{background:'orange',color:'white',padding:'10px',fontSize:'24px'}}>DEBUG HEADER ACTIVE</span>
 

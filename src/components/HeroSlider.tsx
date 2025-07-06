@@ -45,7 +45,7 @@ export default function HeroSlider() {
   }, []);
 
   return (
-    <div className="relative w-full h-[220px] md:h-[400px] overflow-hidden rounded-xl shadow-lg">
+    <div className="relative w-full h-[140px] sm:h-[180px] md:h-[400px] overflow-hidden rounded-xl shadow-lg">
       {images.map((src, idx) => (
         <Image
           key={src}
@@ -54,7 +54,7 @@ export default function HeroSlider() {
           fill
           style={{ objectFit: "cover" }}
           priority={idx === 0}
-          className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out 
+          className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out object-contain md:object-cover 
             ${idx === current ? `${styles[transition]} z-10 opacity-100` : 'opacity-0 z-0'}`}
         />
       ))}

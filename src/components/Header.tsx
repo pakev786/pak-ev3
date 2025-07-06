@@ -48,10 +48,27 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center py-4 justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 whitespace-nowrap">
-  <Image src="/Pics/Logo.png" alt="Pak EV Logo" height={48} width={48} className="h-8 w-auto md:h-12" priority />
-  <span className="text-lg md:text-2xl font-bold text-primary tracking-wide leading-tight" style={{fontFamily: 'inherit', letterSpacing: '0.5px', whiteSpace: 'nowrap'}}>Pak EV</span>
-</Link>
+          <div className="flex items-center gap-2 min-w-0">
+  <Link href="/" className="flex items-center gap-1 whitespace-nowrap min-w-0">
+    <Image src="/Pics/Logo.png" alt="Pak EV Logo" height={48} width={48} className="h-7 w-auto md:h-12 flex-shrink-0" priority />
+    <span className="text-base md:text-2xl font-bold text-primary tracking-wide leading-tight whitespace-nowrap flex-shrink-0" style={{fontFamily: 'inherit', letterSpacing: '0.5px'}}>Pak EV</span>
+  </Link>
+  {/* Mobile Search Icon */}
+  <button
+    className="md:hidden ml-2 p-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary"
+    aria-label="Search"
+    type="button"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-gray-700">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
+    </svg>
+  </button>
+  {/* Mobile Cart Icon */}
+  <Link href="/cart" className="md:hidden ml-2 relative p-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary">
+    <ShoppingCartIcon className="h-6 w-6 text-gray-700" />
+    <CartBadge />
+  </Link>
+</div>
           <span style={{background:'orange',color:'white',padding:'10px',fontSize:'24px'}}>DEBUG HEADER ACTIVE</span>
 
           {/* Navigation links and cart as flex row */}

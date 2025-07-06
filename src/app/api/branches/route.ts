@@ -24,6 +24,7 @@ export async function POST(request: Request) {
       name: body.name,
       address: body.address,
       phone: body.phone || '',
+      email: body.email || '',
       city: body.city || '',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()

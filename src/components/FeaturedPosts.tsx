@@ -22,7 +22,7 @@ export default function FeaturedPosts() {
 
   return (
     <section className="py-10">
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 px-2">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-3 px-2">
         {posts.map((post, index) => (
           <motion.div
             key={post._id}

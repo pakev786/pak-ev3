@@ -76,7 +76,12 @@ export default function EditBranchPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(branch),
+        body: JSON.stringify({
+          name: branch.name,
+          address: branch.address,
+          phone: branch.phone,
+          email: branch.email,
+        }),
       });
 
       if (!response.ok) {

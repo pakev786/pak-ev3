@@ -52,8 +52,8 @@ const Header = () => {
           <div className="flex items-center justify-between w-full min-w-0">
   <div className="flex items-center gap-2 min-w-0 w-full">
     <Link href="/" className="flex items-center gap-1 whitespace-nowrap min-w-0">
-      <Image src="/Pics/Logo.png" alt="Pak EV Logo" height={32} width={32} className="h-8 w-auto md:h-10 flex-shrink-0" priority />
-      <span className="text-base md:text-2xl font-bold text-primary tracking-wide leading-tight whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0" style={{fontFamily: 'inherit', letterSpacing: '0.5px', maxWidth: '48px'}}>Pak EV</span>
+      <Image src="/Pics/Logo.png" alt="Pak EV Logo" height={24} width={24} className="h-6 w-auto md:h-8 flex-shrink-0" priority />
+      <span className="text-xs md:text-xl font-bold text-primary tracking-wide leading-tight whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0" style={{fontFamily: 'inherit', letterSpacing: '0.5px', maxWidth: '32px'}}>Pak EV</span>
     </Link>
     {/* Mobile Search Icon */}
     <button className="md:hidden ml-1 p-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary flex-shrink-0" aria-label="Search" type="button">

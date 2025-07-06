@@ -48,8 +48,9 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center py-4 justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 whitespace-nowrap">
-  <span className="text-[1.7rem] md:text-3xl font-bold text-primary tracking-wide leading-tight" style={{fontFamily: 'inherit', letterSpacing: '0.5px', whiteSpace: 'nowrap'}}>Pak EV</span>
+          <Link href="/" className="flex items-center gap-2 whitespace-nowrap">
+  <Image src="/Pics/Logo.png" alt="Pak EV Logo" height={48} width={48} className="h-8 w-auto md:h-12" priority />
+  <span className="text-lg md:text-2xl font-bold text-primary tracking-wide leading-tight" style={{fontFamily: 'inherit', letterSpacing: '0.5px', whiteSpace: 'nowrap'}}>Pak EV</span>
 </Link>
           <span style={{background:'orange',color:'white',padding:'10px',fontSize:'24px'}}>DEBUG HEADER ACTIVE</span>
 

@@ -53,9 +53,14 @@ export default function BranchesPage() {
   const fetchBranches = async () => {
     try {
       const response = await fetch('/api/branches');
-      const result: ApiResponse<Branch[]> = await response.json();
+      const result: ApiResponse<any[]> = await response.json();
       if (result.success && result.data) {
-        setBranches(result.data);
+        // Map _id to id for frontend usage
+        const branches = result.data.map((branch: any) => ({
+          ...branch,
+          id: branch._id,
+        }));
+        setBranches(branches);
       } else {
         throw new Error(result.error || 'Failed to fetch branches');
       }
@@ -66,6 +71,7 @@ export default function BranchesPage() {
       setLoading(false);
     }
   };
+
 
 
   const [confirmOpen, setConfirmOpen] = useState(false);

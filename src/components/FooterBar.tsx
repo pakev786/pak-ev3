@@ -3,7 +3,8 @@ import React from 'react'
 export default function FooterBar({ email, phone, facebook, youtube, instagram }: { email: string, phone: string, facebook?: string, youtube?: string, instagram?: string }) {
   return (
     <footer className="w-full bg-neutral-900/80 text-neutral-200 py-7 mt-12">
-      <div className="container mx-auto px-4 flex flex-row flex-wrap items-center justify-center gap-4 text-base md:text-lg ml-8">
+      <div className="container mx-auto px-4 flex flex-row flex-wrap items-center gap-4 text-base md:text-lg ml-4">
+        {/* Social/contact icons */}
         <a
           href={`tel:${phone}`}
           className="flex items-center gap-1 hover:text-green-500 transition-colors"
@@ -31,10 +32,11 @@ export default function FooterBar({ email, phone, facebook, youtube, instagram }
           </a>
         )}
         {instagram && (
-          <a href={instagram} target="_blank" rel="noopener noreferrer" className="hover:text-pink-500 transition-colors" title="Instagram">
+          <a href={instagram} target="_blank" rel="noopener noreferrer" className="hover:text-pink-500 transition-colors mr-8" title="Instagram">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="inline align-middle"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.34 3.608 1.314.974.974 1.252 2.241 1.314 3.608.058 1.266.069 1.646.069 4.85s-.012 3.584-.07 4.85c-.062 1.366-.34 2.633-1.314 3.608-.974.974-2.241 1.252-3.608 1.314-1.266.058-1.646.069-4.85.069s-3.584-.012-4.85-.07c-1.366-.062-2.633-.34-3.608-1.314-.974-.974-1.252-2.241-1.314-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.85c.062-1.366.34-2.633 1.314-3.608C4.521 2.573 5.788 2.295 7.154 2.233 8.42 2.175 8.8 2.163 12 2.163zm0-2.163C8.736 0 8.332.012 7.052.07 5.77.128 4.665.366 3.7 1.332c-.965.965-1.204 2.07-1.262 3.352C2.012 5.668 2 6.072 2 9.337v5.326c0 3.265.012 3.669.07 4.949.058 1.282.297 2.387 1.262 3.352.965.965 2.07 1.204 3.352 1.262 1.28.058 1.684.07 4.949.07s3.669-.012 4.949-.07c1.282-.058 2.387-.297 3.352-1.262.965-.965 1.204-2.07 1.262-3.352.058-1.28.07-1.684.07-4.949V9.337c0-3.265-.012-3.669-.07-4.949-.058-1.282-.297-2.387-1.262-3.352-.965-.965-2.07-1.204-3.352-1.262C15.668.012 15.264 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
           </a>
         )}
+        <div className="flex-grow"></div>
       </div>
     </footer>
   )

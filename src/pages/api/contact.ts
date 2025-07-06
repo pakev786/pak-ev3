@@ -12,7 +12,7 @@ type ContactData = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const client = await getMongoClient();
   const db = client.db('pakev');
-  const collection = db.collection('contact');
+  const collection = db.collection<ContactData & { _id: string }>('contact');
 
   if (req.method === 'GET') {
     try {

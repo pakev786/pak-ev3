@@ -45,7 +45,7 @@ export default function HeroSlider() {
   }, []);
 
   return (
-    <div className="relative w-full h-[400px] overflow-hidden rounded-xl shadow-lg">
+    <div className="relative w-full h-[220px] md:h-[400px] overflow-hidden rounded-xl shadow-lg">
       {images.map((src, idx) => (
         <Image
           key={src}

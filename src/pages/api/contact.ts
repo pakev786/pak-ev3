@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === 'GET') {
     try {
-      const doc = await collection.findOne({ _id: 'main' });
+      const doc = await collection.findOne({ _id: 'main' } as any);
       if (doc) {
         res.status(200).json(doc);
       } else {
@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (instagram) dataToSave.instagram = instagram;
     try {
       await collection.updateOne(
-        { _id: 'main' },
+        { _id: 'main' } as any,
         { $set: dataToSave },
         { upsert: true }
       );

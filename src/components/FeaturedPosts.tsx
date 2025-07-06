@@ -26,7 +26,7 @@ export default function FeaturedPosts() {
         {posts.map((post, index) => (
           <motion.div
             key={post._id}
-            className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between transition-all duration-300 group min-w-0 w-full p-2 min-h-[7rem] lg:min-h-[10rem]"
+            className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between transition-all duration-300 group min-w-0 w-full p-2 min-h-[7rem] lg:min-h-[14rem]"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: index * 0.08, ease: 'easeOut' }}
@@ -77,7 +77,7 @@ export default function FeaturedPosts() {
               </div>
             </motion.div>
             {post.titleImage && (
-              <img src={post.titleImage} alt={post.title} className="h-28 lg:h-40 w-full object-cover rounded-lg" />
+              <img src={post.titleImage} alt={post.title} className="h-28 lg:h-56 w-full object-cover rounded-lg" />
             )}
             <h3 className="mt-2 text-lg font-semibold">{post.title}</h3>
             <p className="text-gray-600">{post.category}</p>

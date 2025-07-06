@@ -1,8 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import fs from 'fs';
-import path from 'path';
-
-const filePath = path.join(process.cwd(), 'src/data/contact.json');
+import { getMongoClient } from '@/lib/mongodb';
 
 type ContactData = {
   email: string;
@@ -12,13 +9,22 @@ type ContactData = {
   instagram?: string;
 };
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const client = await getMongoClient();
+  const db = client.db('pakev');
+  const collection = db.collection('contact');
+
   if (req.method === 'GET') {
     try {
-      const data = fs.readFileSync(filePath, 'utf-8');
-      res.status(200).json(JSON.parse(data));
-    } catch {
-      res.status(200).json({ email: 'info@pakev.com', phone: '+92 300 1234567' });
+      const doc = await collection.findOne({ _id: 'main' });
+      if (doc) {
+        res.status(200).json(doc);
+      } else {
+        // Default fallback
+        res.status(200).json({ email: 'info@pakev.com', phone: '+92 300 1234567' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch contact info', details: error instanceof Error ? error.message : error });
     }
   } else if (req.method === 'POST') {
     const { email, phone, facebook, youtube, instagram } = req.body;
@@ -31,10 +37,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (youtube) dataToSave.youtube = youtube;
     if (instagram) dataToSave.instagram = instagram;
     try {
-      fs.writeFileSync(filePath, JSON.stringify(dataToSave, null, 2), 'utf-8');
+      await collection.updateOne(
+        { _id: 'main' },
+        { $set: dataToSave },
+        { upsert: true }
+      );
       res.status(200).json({ success: true });
-    } catch {
-      res.status(500).json({ error: 'Failed to save' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to save', details: error instanceof Error ? error.message : error });
     }
   } else {
     res.setHeader('Allow', ['GET', 'POST']);

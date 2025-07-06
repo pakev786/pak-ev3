@@ -47,61 +47,62 @@ const Header = () => {
 
       {/* Main Header */}
       <div className="container mx-auto px-4">
-        <div className="flex items-center py-4 justify-between">
-          {/* Logo */}
-          <div className="flex items-center justify-between w-full min-w-0">
-  <div className="flex items-center gap-2 min-w-0 w-full">
-    <Link href="/" className="flex items-center gap-1 whitespace-nowrap min-w-0">
-      <Image src="/Pics/Logo.png" alt="Pak EV Logo" height={24} width={24} className="h-6 w-auto md:h-8 flex-shrink-0" priority />
-      <span className="text-xs md:text-xl font-bold text-primary tracking-wide leading-tight whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0" style={{fontFamily: 'inherit', letterSpacing: '0.5px', maxWidth: '32px'}}>Pak EV</span>
-    </Link>
-    {/* Mobile Search Icon */}
-    <button className="md:hidden ml-1 p-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary flex-shrink-0" aria-label="Search" type="button">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-gray-700">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
-      </svg>
-    </button>
-    {/* Mobile Cart Icon (only once) */}
-    <Link href="/cart" className="md:hidden ml-1 relative p-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary flex-shrink-0">
-      <ShoppingCartIcon className="h-6 w-6 text-gray-700" />
-      <CartBadge />
-    </Link>
-  </div>
-</div>
-
-
-          {/* Navigation links and cart as flex row */}
-          <div className="flex flex-1 items-center">
-            <nav className="hidden md:flex items-center space-x-6 flex-grow justify-start">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-gray-700 hover:text-primary transition-colors font-medium"
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </nav>
-            {/* Cart Icon always at far right */}
-            <div className="hidden md:flex items-center justify-end min-w-[56px]">
-              <div style={{background: 'red', color: 'white', padding: '6px 18px', borderRadius: '10px', fontWeight: 'bold'}}>CART</div>
+        <div className="w-full">
+          {/* MOBILE HEADER ROW: Only logo, site name, search, cart, hamburger */}
+          <div className="flex items-center w-full min-w-0 justify-between md:hidden gap-1 px-1" style={{height: '44px'}}>
+            <Link href="/" className="flex items-center gap-0.5 whitespace-nowrap min-w-0">
+              <Image src="/Pics/Logo.png" alt="Pak EV Logo" height={20} width={20} className="h-5 w-auto flex-shrink-0" priority />
+              <span className="text-xs font-bold text-primary tracking-wide leading-tight whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0" style={{fontFamily: 'inherit', letterSpacing: '0.5px', maxWidth: '28px'}}>Pak EV</span>
+            </Link>
+            <button className="p-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary flex-shrink-0" aria-label="Search" type="button">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-gray-700">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
+              </svg>
+            </button>
+            <Link href="/cart" className="relative p-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary flex-shrink-0">
+              <ShoppingCartIcon className="h-5 w-5 text-gray-700" />
+              <CartBadge />
+            </Link>
+            <button
+              className="text-gray-700 hover:text-primary p-2"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Open Menu"
+            >
+              {isMenuOpen ? (
+                <XMarkIcon className="h-5 w-5" />
+              ) : (
+                <Bars3Icon className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+          {/* DESKTOP HEADER ROW (unchanged) */}
+          <div className="hidden md:flex items-center py-4 justify-between w-full min-w-0">
+            <div className="flex items-center gap-2 min-w-0 w-full">
+              <Link href="/" className="flex items-center gap-1 whitespace-nowrap min-w-0">
+                <Image src="/Pics/Logo.png" alt="Pak EV Logo" height={24} width={24} className="h-6 w-auto md:h-8 flex-shrink-0" priority />
+                <span className="text-xs md:text-xl font-bold text-primary tracking-wide leading-tight whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0" style={{fontFamily: 'inherit', letterSpacing: '0.5px', maxWidth: '32px'}}>Pak EV</span>
+              </Link>
+            </div>
+            <div className="flex flex-1 items-center">
+              <nav className="flex items-center space-x-6 flex-grow justify-start">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="text-gray-700 hover:text-primary transition-colors font-medium"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </nav>
+              <div className="flex items-center justify-end min-w-[56px]">
+                <div style={{background: 'red', color: 'white', padding: '6px 18px', borderRadius: '10px', fontWeight: 'bold'}}>CART</div>
+              </div>
             </div>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-gray-700 hover:text-primary"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? (
-              <XMarkIcon className="h-6 w-6" />
-            ) : (
-              <Bars3Icon className="h-6 w-6" />
-            )}
-          </button>
         </div>
       </div>
+
 
       {/* Mobile Navigation */}
       {isMenuOpen && (

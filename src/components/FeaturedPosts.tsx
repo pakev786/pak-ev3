@@ -22,11 +22,11 @@ export default function FeaturedPosts() {
 
   return (
     <section className="py-10">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 px-2">
         {posts.map((post, index) => (
           <motion.div
             key={post._id}
-            className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between transition-all duration-300 group"
+            className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between transition-all duration-300 group min-w-0 w-full p-2"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: index * 0.08, ease: 'easeOut' }}
@@ -77,7 +77,7 @@ export default function FeaturedPosts() {
               </div>
             </motion.div>
             {post.titleImage && (
-              <img src={post.titleImage} alt={post.title} className="h-40 w-full object-cover rounded" />
+              <img src={post.titleImage} alt={post.title} className="h-28 w-full object-cover rounded-lg" />
             )}
             <h3 className="mt-2 text-lg font-semibold">{post.title}</h3>
             <p className="text-gray-600">{post.category}</p>

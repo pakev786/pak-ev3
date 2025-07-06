@@ -4,11 +4,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 
 const ADMIN_USER = {
   username: 'admin',
-  password: process.env.ADMIN_PASSWORD
+  password: 'Admin786'
 };
-if (!ADMIN_USER.password) {
-  throw new Error('ADMIN_PASSWORD env variable is not set! Please set it in your .env or Vercel dashboard.');
-}
 
 const authOptions: NextAuthOptions = {
   providers: [

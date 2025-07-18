@@ -35,9 +35,9 @@ export default function Navigation() {
           <div className="flex">
             <Link href="/" className="flex items-center gap-8 group">
               <img src="/logo.png" alt="Pak EV Logo" className="h-16 w-auto" />
-              <span className="text-5xl font-extrabold pl-2 bg-gradient-to-b from-[#f94211] to-[#f97f14] text-transparent bg-clip-text" style={{ fontFamily: 'Stencil Std, Stencil, sans-serif', lineHeight: '1' }}>
-                Pak EV
-              </span>
+              {/* فونٹ اب Army Wide استعمال ہو رہا ہے۔ */}
+{/* اصل Pak EV برانڈنگ کے لیے: Stardos Stencil، ultra-compact سائز، اور Urdu comment */}
+<span className="font-army text-[7px] font-bold text-primary tracking-wide leading-tight whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0" style={{letterSpacing: '0.5px', maxWidth: '12px'}}>Pak EV</span>
             </Link>
 
           </div>

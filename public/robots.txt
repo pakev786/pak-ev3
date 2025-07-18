@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pakev.pk/sitemap.xml

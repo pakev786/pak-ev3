@@ -46,14 +46,23 @@ export default function HeroSlider() {
 
   return (
     <div className="relative w-full h-[140px] sm:h-[180px] md:h-[400px] overflow-hidden rounded-xl shadow-lg">
+      {/*
+        یہ کوڈ Next.js Image component کو مکمل optimize طریقے سے استعمال کرتا ہے:
+        - پہلی تصویر (idx === 0) priority کے ساتھ فوراً لوڈ ہوگی (LCP بہتر)
+        - باقی images lazy-load ہوں گی (performance boost)
+        - alt text SEO friendly رکھا گیا ہے
+        - sizes attribute responsive image serving کے لیے add کیا گیا ہے
+      */}
       {images.map((src, idx) => (
         <Image
           key={src}
           src={src}
-          alt={`Slider Image ${idx + 1}`}
+          alt={`Pak EV slider image ${idx + 1}`}
           fill
           style={{ objectFit: "cover" }}
           priority={idx === 0}
+          loading={idx === 0 ? "eager" : "lazy"}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
           className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out object-contain md:object-cover 
             ${idx === current ? `${styles[transition]} z-10 opacity-100` : 'opacity-0 z-0'}`}
         />

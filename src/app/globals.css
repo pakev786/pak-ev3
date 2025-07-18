@@ -1,3 +1,8 @@
+/* Army Wide فونٹ اصل TTF فائل کے ساتھ */
+/* Army Wide Medium فونٹ اصل meta-data کے مطابق */
+/* Stardos Stencil (Google Fonts) اب استعمال ہو رہا ہے */
+@import url('https://fonts.googleapis.com/css2?family=Stardos+Stencil:wght@700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

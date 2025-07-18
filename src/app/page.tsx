@@ -6,14 +6,16 @@ import Contact from '@/components/Contact'
 import FeaturedPosts from '@/components/FeaturedPosts'
 
 import FooterBar from '@/components/FooterBar'
-import fs from 'fs';
-import path from 'path';
 
+//
+// اب fs اور path استعمال نہیں ہو سکتے، اس لیے contact info ایک API route سے لی جاتی ہے۔
+// یہ طریقہ Next.js app directory اور future deployment کے لیے بہترین ہے۔
+//
 async function getContactInfo() {
   try {
-    const filePath = path.join(process.cwd(), 'src/data/contact.json');
-    const data = await fs.promises.readFile(filePath, 'utf-8');
-    return JSON.parse(data);
+    const res = await fetch('/api/contact-info', { cache: 'no-store' });
+    if (!res.ok) throw new Error('Network error');
+    return await res.json();
   } catch {
     return { email: 'info@pakev.com', phone: '+92 300 1234567' };
   }

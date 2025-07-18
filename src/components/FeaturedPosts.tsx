@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
+import Image from 'next/image'
 
 export default function FeaturedPosts() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -76,8 +77,21 @@ export default function FeaturedPosts() {
                 </svg>
               </div>
             </motion.div>
+            {/*
+              اس Image کو Next.js کے Image component پر migrate کیا گیا ہے:
+              - responsive sizes, lazy loading, اور alt attribute کے ساتھ
+              - performance اور SEO دونوں بہتر ہوں گے
+            */}
             {post.titleImage && (
-              <img src={post.titleImage} alt={post.title} className="h-28 lg:h-56 w-full object-cover rounded-lg" />
+              <Image
+                src={post.titleImage}
+                alt={post.title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
+                className="object-cover rounded-lg"
+                loading="lazy"
+                style={{objectFit:'cover'}}
+              />
             )}
             <h3 className="mt-2 text-lg font-semibold">{post.title}</h3>
             <p className="text-gray-600">{post.category}</p>

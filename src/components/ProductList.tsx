@@ -53,13 +53,25 @@ const ProductList: React.FC<ProductListProps> = ({ category }) => {
           {products.map((product) => (
             <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="relative h-96">
+                {/*
+                  اس Image کو مکمل optimize کیا گیا ہے:
+                  - sizes attribute responsive loading کے لیے
+                  - lazy loading (default)
+                {/*
+                  اس Image کو مکمل optimize کیا گیا ہے:
+                  - sizes attribute responsive loading کے لیے
+                  - lazy loading (default)
+                  - alt text SEO کے لیے
+                */}
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   style={{ objectFit: 'cover' }}
+                  loading="lazy"
                 />
-              </div>
+          </div>
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                 <p className="text-gray-600 mb-4">{product.description}</p>

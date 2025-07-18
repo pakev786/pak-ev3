@@ -14,7 +14,6 @@ export const metadata: Metadata = {
   description: 'Leading provider of electric vehicle charging solutions in Pakistan',
 }
 
-
 export default function RootLayout({
   children,
 }: {

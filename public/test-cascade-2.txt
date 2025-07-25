@@ -1,0 +1,2 @@
+Cascade Test 2
+اگر یہ لائن live site پر نظر آ جائے تو public/ directory واقعی serve ہو رہی ہے۔

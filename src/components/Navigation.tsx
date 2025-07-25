@@ -31,24 +31,23 @@ export default function Navigation() {
         <div className="w-full h-full animate-gradient-x bg-gradient-to-r from-primary via-green-400 to-blue-400 bg-[length:200%_100%]" style={{borderRadius:2}} />
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        {/* ہیڈر کی چوڑائی موبائل پر کم */}
+<div className="flex justify-between h-14 sm:h-16">
           <div className="flex">
             <Link href="/" className="flex items-center gap-8 group">
-              <img src="/logo.png" alt="Pak EV Logo" className="h-16 w-auto" />
-              {/* فونٹ اب Army Wide استعمال ہو رہا ہے۔ */}
-{/* اصل Pak EV برانڈنگ کے لیے: Stardos Stencil، ultra-compact سائز، اور Urdu comment */}
-{/* اصل Pak EV برانڈنگ کے لیے: Stardos Stencil، ultra-compact سائز، اور Urdu comment */}
-{/* یہ ٹیسٹ کے لیے ہے: اگر live site پر یہ سبز رنگ اور "Pak EV TEST" نظر آئے تو یہی کوڈ render ہو رہا ہے */}
-<span className="font-army text-[7px] font-bold tracking-wide leading-tight whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0" style={{letterSpacing: '0.5px', maxWidth: '12px', color: 'green'}} data-testid="nav-brand-test">Pak EV TEST</span>
+              {/* لوگو کا سائز موبائل پر کم */}
+<img src="/logo.png" alt="Pak EV Logo" className="h-12 w-auto sm:h-16" />
+{/* اصل Pak EV برانڈنگ: Stardos Stencil، اوریجنل color */}
+<span className="font-army text-lg sm:text-xl font-bold tracking-wide leading-tight whitespace-nowrap flex-shrink-0" style={{color: '#EF7C00', letterSpacing: '1px', maxWidth: '80px'}} data-testid="nav-brand">PAK EV</span>
             </Link>
 
           </div>
 
-          {/* Desktop menu */}
-          <div className="hidden md:flex items-center space-x-2">
-            {/* Cart Icon (desktop) */}
+          {/* Desktop + Mobile: Cart ہمیشہ header میں right پر */}
+          <div className="flex items-center space-x-2">
+            {/* Cart Icon (ہمیشہ visible) */}
             <Link href="/cart" className="relative ml-2 flex items-center group">
-              <ShoppingCartIcon className="h-7 w-7 text-gray-700 hover:text-primary transition-colors" />
+              <ShoppingCartIcon className="h-7 w-7 sm:h-7 sm:w-7 h-6 w-6 text-gray-700 hover:text-primary transition-colors" />
               <CartBadge />
             </Link>
             {/* Cart Icon */}
@@ -222,30 +221,7 @@ export default function Navigation() {
             >
               About Us
             </Link>
-            {/* Cart Icon (mobile) */}
-            <Link
-              href="/cart"
-              className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <span className="inline-flex items-center">
-                <ShoppingCartIcon className="h-6 w-6 mr-1" />
-                Cart
-                <CartBadge />
-              </span>
-            </Link>
-            {/* Cart Icon (mobile) */}
-            <Link
-              href="/cart"
-              className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <span className="inline-flex items-center">
-                <ShoppingCartIcon className="h-6 w-6 mr-1" />
-                Cart
-                <CartBadge />
-              </span>
-            </Link>
+            {/* Cart اب menu میں نہیں، ہمیشہ header میں ہے */}
           </div>
         </div>
       )}

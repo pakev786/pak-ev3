@@ -37,6 +37,7 @@ export default function Navigation() {
               <img src="/logo.png" alt="Pak EV Logo" className="h-16 w-auto" />
               {/* فونٹ اب Army Wide استعمال ہو رہا ہے۔ */}
 {/* اصل Pak EV برانڈنگ کے لیے: Stardos Stencil، ultra-compact سائز، اور Urdu comment */}
+{/* اصل Pak EV برانڈنگ کے لیے: Stardos Stencil، ultra-compact سائز، اور Urdu comment */}
 <span className="font-army text-[7px] font-bold text-primary tracking-wide leading-tight whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0" style={{letterSpacing: '0.5px', maxWidth: '12px'}}>Pak EV</span>
             </Link>
 

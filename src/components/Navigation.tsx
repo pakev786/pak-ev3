@@ -181,6 +181,11 @@ export default function Navigation() {
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden">
+          {/* اصل Pak EV برانڈنگ موبائل مینو میں بھی: Stardos Stencil، ultra-compact */}
+          <div className="flex items-center gap-2 px-2 pt-3 pb-1">
+            <img src="/logo.png" alt="Pak EV Logo" className="h-10 w-auto" />
+            <span className="font-army text-[10px] font-bold text-primary tracking-wide leading-tight whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0" style={{letterSpacing: '0.5px', maxWidth: '24px'}}>Pak EV</span>
+          </div>
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link
               href="/"

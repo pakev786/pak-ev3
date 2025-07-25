@@ -7,9 +7,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Stardos Stencil کو ہر حال میں enforce کریں */
+/* Army Wide فونٹ ویب پر استعمال کریں */
+@font-face {
+  font-family: 'Army Wide';
+  src: url('/fonts/Army Wide.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 .font-army {
-  font-family: 'Stardos Stencil', cursive, sans-serif !important;
+  font-family: 'Army Wide', 'Stardos Stencil', cursive, sans-serif !important;
+}
+
+/* Orange Gradient Text Utility */
+.text-gradient-orange {
+  background: linear-gradient(90deg, #ff9800 0%, #ef7c00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 :root {

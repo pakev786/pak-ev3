@@ -10,12 +10,13 @@
 /* Army Wide فونٹ ویب پر استعمال کریں */
 @font-face {
   font-family: 'Army Wide';
-  src: url('/fonts/Army Wide.ttf') format('truetype');
+  src: url('/fonts/ArmyWide.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 .font-army {
-  font-family: 'Army Wide', 'Stardos Stencil', cursive, sans-serif !important;
+  font-family: 'Army Wide', sans-serif !important;
 }
 
 /* Orange Gradient Text Utility */

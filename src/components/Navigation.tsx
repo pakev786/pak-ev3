@@ -32,13 +32,15 @@ export default function Navigation() {
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ہیڈر کی چوڑائی موبائل پر کم */}
-<div className="flex justify-between h-14 sm:h-16">
+{/* موبائل پر header اور menu layout بہتر */}
+<div className="flex justify-between items-center h-14 sm:h-16 w-full">
           <div className="flex">
             <Link href="/" className="flex items-center gap-8 group">
               {/* لوگو کا سائز موبائل پر کم */}
 <img src="/logo.png" alt="Pak EV Logo" className="h-12 w-auto sm:h-16" />
 {/* اصل Pak EV برانڈنگ: Stardos Stencil، اوریجنل color */}
-<span className="font-army text-lg sm:text-xl font-bold tracking-wide leading-tight whitespace-nowrap flex-shrink-0" style={{color: '#EF7C00', letterSpacing: '1px', maxWidth: '80px'}} data-testid="nav-brand">PAK EV</span>
+{/* برانڈنگ: ہمیشہ Stardos Stencil (font-army) میں */}
+<span className="font-army text-xl sm:text-2xl font-bold tracking-wide leading-tight whitespace-nowrap flex-shrink-0" style={{color: '#EF7C00', letterSpacing: '1px', maxWidth: '110px', fontFamily: 'Stardos Stencil, sans-serif'}} data-testid="nav-brand">PAK EV</span>
             </Link>
 
           </div>

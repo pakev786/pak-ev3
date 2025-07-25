@@ -48,30 +48,69 @@ export default function Navigation() {
 
           {/* Desktop + Mobile: Cart ہمیشہ header میں right پر */}
           <div className="flex items-center space-x-2">
-            {/* Cart Icon (ہمیشہ visible) */}
-            <Link href="/cart" className="relative ml-2 flex items-center group">
-              <ShoppingCartIcon className="h-7 w-7 sm:h-7 sm:w-7 h-6 w-6 text-gray-700 hover:text-primary transition-colors" />
-              <CartBadge />
-            </Link>
-            {/* Cart Icon */}
-            {/* Search Icon */}
-            <button
-              className="p-2 rounded-full hover:bg-primary/10 transition-colors focus:outline-none mr-2"
-              aria-label="Search"
-              onClick={() => setShowSearch(true)}
-            >
-              <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            </button>
-            {[{href:"/",label:"Home"},{href:"/branches",label:"Branches"}].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="relative px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary transition-colors duration-200 group"
-              >
-                {item.label}
-                <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-primary via-green-400 to-blue-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded" />
-              </Link>
-            ))}
+  {/* Cart Icon (ہمیشہ visible) */}
+  <Link href="/cart" className="relative ml-2 flex items-center group">
+    <ShoppingCartIcon className="h-7 w-7 sm:h-7 sm:w-7 h-6 w-6 text-gray-700 hover:text-primary transition-colors" />
+    <CartBadge />
+  </Link>
+  <button
+    className="p-2 rounded-full hover:bg-primary/10 transition-colors focus:outline-none mr-2"
+    aria-label="Search"
+    onClick={() => setShowSearch(true)}
+  >
+    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+  </button>
+  {/* Hamburger menu button (صرف mobile پر) */}
+  <div className="md:hidden flex items-center">
+    <button
+      onClick={() => setIsMenuOpen(!isMenuOpen)}
+      className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+    >
+      <span className="sr-only">Open main menu</span>
+      {!isMenuOpen ? (
+        <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      ) : (
+        <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      )}
+    </button>
+  </div>
+  {/* Desktop menu links (صرف md/up پر show) */}
+  <div className="hidden md:flex items-center space-x-2">
+    <Link href="/" className="relative px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary transition-colors duration-200 group">
+      Home
+      <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-primary via-green-400 to-blue-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded" />
+    </Link>
+    <Link href="/branches" className="relative px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary transition-colors duration-200 group">
+      Branches
+      <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-primary via-green-400 to-blue-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded" />
+    </Link>
+    {/* باقی desktop menu links یہاں add کریں (Products, Calculators, About, ...) */}
+    <div className="relative group">
+      <button className="text-gray-600 hover:text-primary px-3 py-2 rounded-md text-sm font-medium inline-flex items-center transition-colors">
+        EV Products
+        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible invisible transition-all duration-300 z-50">
+        <div className="py-1">
+          <Link href="/ev-parts" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 hover:text-primary transition">EV Parts</Link>
+          <Link href="/ev-kits" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 hover:text-primary transition">EV Kits</Link>
+          <Link href="/blog/triride-success-stories" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 hover:text-primary transition">TriRide</Link>
+        </div>
+      </div>
+    </div>
+    {/* ... باقی dropdowns بھی اسی طرح ... */}
+    <Link href="/about" className="relative px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary transition-colors duration-200 group">
+      About Us
+      <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-gradient-to-r from-primary via-green-400 to-blue-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded" />
+    </Link>
+  </div>
+</div>
             <div className="relative group">
               <button className="text-gray-600 hover:text-primary px-3 py-2 rounded-md text-sm font-medium inline-flex items-center transition-colors">
                 EV Products

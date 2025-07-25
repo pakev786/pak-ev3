@@ -40,7 +40,7 @@ export default function Navigation() {
 <img src="/logo.png" alt="Pak EV Logo" className="h-12 w-auto sm:h-16" />
 {/* اصل Pak EV برانڈنگ: Stardos Stencil، اوریجنل color */}
 {/* برانڈنگ: ہمیشہ Stardos Stencil (font-army) میں */}
-<span className="font-army text-xl sm:text-2xl font-bold tracking-wide leading-tight whitespace-nowrap flex-shrink-0" style={{color: '#EF7C00', letterSpacing: '1px', maxWidth: '110px', fontFamily: 'Stardos Stencil, sans-serif'}} data-testid="nav-brand">PAK EV</span>
+<span className="font-army text-xl sm:text-2xl font-bold tracking-wide leading-tight whitespace-nowrap flex-shrink-0" style={{color: '#EF7C00', letterSpacing: '1px', maxWidth: '110px'}} data-testid="nav-brand">PAK EV</span>
             </Link>
 
           </div>

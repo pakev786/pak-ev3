@@ -7,6 +7,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Stardos Stencil کو ہر حال میں enforce کریں */
+.font-army {
+  font-family: 'Stardos Stencil', cursive, sans-serif !important;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;

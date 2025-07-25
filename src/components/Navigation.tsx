@@ -38,7 +38,8 @@ export default function Navigation() {
               {/* فونٹ اب Army Wide استعمال ہو رہا ہے۔ */}
 {/* اصل Pak EV برانڈنگ کے لیے: Stardos Stencil، ultra-compact سائز، اور Urdu comment */}
 {/* اصل Pak EV برانڈنگ کے لیے: Stardos Stencil، ultra-compact سائز، اور Urdu comment */}
-<span className="font-army text-[7px] font-bold text-primary tracking-wide leading-tight whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0" style={{letterSpacing: '0.5px', maxWidth: '12px'}}>Pak EV</span>
+{/* یہ ٹیسٹ کے لیے ہے: اگر live site پر یہ سبز رنگ اور "Pak EV TEST" نظر آئے تو یہی کوڈ render ہو رہا ہے */}
+<span className="font-army text-[7px] font-bold tracking-wide leading-tight whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0" style={{letterSpacing: '0.5px', maxWidth: '12px', color: 'green'}} data-testid="nav-brand-test">Pak EV TEST</span>
             </Link>
 
           </div>

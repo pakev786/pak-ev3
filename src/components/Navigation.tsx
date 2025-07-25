@@ -1,18 +1,13 @@
-'use client'
-
-import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { motion } from 'framer-motion'
-import LiveSearchResults from './LiveSearchResults'
-import { ShoppingCartIcon } from '@heroicons/react/24/outline'
-import { useCart } from './CartContext'
-import CartBadge from './CartBadge'
+import React from 'react';
 
 export default function Navigation() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [showSearch, setShowSearch] = useState(false)
-  const [search, setSearch] = useState("");
+  return (
+    <nav>
+      Test
+    </nav>
+  );
+}
+
 
   // Close search modal on ESC
   React.useEffect(() => {
@@ -25,7 +20,10 @@ export default function Navigation() {
   }, [showSearch]);
 
   return (
-    <nav className="backdrop-blur-lg bg-white/70 shadow-lg fixed w-full z-50 border-b-0">
+    <nav>
+      Test
+    </nav>
+  )
       {/* Animated gradient border */}
       <div className="absolute left-0 right-0 bottom-0 h-1 z-50">
         <div className="w-full h-full animate-gradient-x bg-gradient-to-r from-primary via-green-400 to-blue-400 bg-[length:200%_100%]" style={{borderRadius:2}} />

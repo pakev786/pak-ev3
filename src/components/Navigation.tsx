@@ -8,7 +8,6 @@ export default function Navigation() {
   );
 }
 
-
   // Close search modal on ESC
   React.useEffect(() => {
     if (!showSearch) return;

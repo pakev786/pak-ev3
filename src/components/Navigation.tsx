@@ -99,15 +99,15 @@ export default function Navigation() {
 
       {/* موبائل مینو */}
       {isMenuOpen && (
-  // موبائل مینیو اوپن: overlay پر click سے مینیو بند، drawer w-full max-w-xs
-  <div className="fixed inset-0 z-[999] flex">
+  // موبائل مینیو: overlay پوری screen پر، drawer absolute left-0, overlay پر click سے مینیو بند
+  <div className="fixed inset-0 z-[999]">
     {/* overlay */}
     <div
-      className="flex-1 bg-black/40 backdrop-blur-sm"
+      className="absolute inset-0 bg-black/40 backdrop-blur-sm"
       onClick={() => setIsMenuOpen(false)}
     />
     {/* drawer */}
-    <div className="relative bg-white h-full shadow-lg p-4 flex flex-col gap-2 w-full max-w-xs animate-slideInLeft">
+    <div className="absolute left-0 top-0 h-full w-4/5 max-w-xs bg-white shadow-lg p-4 flex flex-col gap-2 animate-slideInLeft">
       {/* برانڈنگ */}
       <div className="flex items-center gap-2 mb-4">
         <img src="/logo.png" alt="Pak EV Logo" className="h-10 w-auto" />

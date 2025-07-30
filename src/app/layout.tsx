@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning={true}>
         <CartProvider>
           <Navigation />
-          <main className="pt-16">
+          <main className="pt-16 bg-transparent">
             <AuthProvider>{children}</AuthProvider>
           </main>
           <WhatsappChatButton />

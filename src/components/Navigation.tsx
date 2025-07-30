@@ -103,7 +103,7 @@ export default function Navigation() {
   <div className="fixed inset-0 z-[999]">
     {/* overlay */}
     <div
-      className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+      className="absolute inset-0 bg-white/40 backdrop-blur-lg backdrop-saturate-150"
       onClick={() => setIsMenuOpen(false)}
     />
     {/* classic sidebar drawer */}

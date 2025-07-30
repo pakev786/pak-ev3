@@ -99,32 +99,32 @@ export default function Navigation() {
 
       {/* موبائل مینو */}
       {isMenuOpen && (
-  // موبائل مینیو: overlay پوری screen پر، drawer absolute left-0, overlay پر click سے مینیو بند
+  // موبائل مینیو: پورا اسکرین drawer، links center میں، overlay پیچھے
   <div className="fixed inset-0 z-[999]">
     {/* overlay */}
     <div
       className="absolute inset-0 bg-black/40 backdrop-blur-sm"
       onClick={() => setIsMenuOpen(false)}
     />
-    {/* drawer */}
-    <div className="absolute left-0 top-0 h-full w-4/5 max-w-xs bg-white shadow-lg p-4 flex flex-col gap-2 animate-slideInLeft">
+    {/* fullscreen drawer */}
+    <div className="absolute inset-0 bg-white flex flex-col justify-center items-center gap-4">
       {/* برانڈنگ */}
-      <div className="flex items-center gap-2 mb-4">
-        <img src="/logo.png" alt="Pak EV Logo" className="h-10 w-auto" />
-        <span className="font-army text-gradient-orange text-xl font-bold tracking-wide leading-tight whitespace-nowrap flex-shrink-0">PAK EV</span>
+      <div className="flex items-center gap-2 mb-6">
+        <img src="/logo.png" alt="Pak EV Logo" className="h-12 w-auto" />
+        <span className="font-army text-gradient-orange text-2xl font-bold tracking-wide leading-tight whitespace-nowrap flex-shrink-0">PAK EV</span>
       </div>
       {/* مینو لنکس */}
-      <Link href="/" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Home</Link>
-      <Link href="/branches" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Branches</Link>
-      <Link href="/ev-parts" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Parts</Link>
-      <Link href="/ev-kits" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Kits</Link>
-      <Link href="/solar-parts" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Solar Parts</Link>
-      <Link href="/ev-batteries" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Batteries</Link>
-      <Link href="/solar-batteries" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Solar Batteries</Link>
-      <Link href="/ev-calculator" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Calculator</Link>
-      <Link href="/load-calculator" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Load Calculator</Link>
-      <Link href="/about" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>About Us</Link>
-      <Link href="/cart" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Cart</Link>
+      <Link href="/" className="text-gray-700 hover:text-primary text-xl font-semibold py-2 px-4 rounded transition" onClick={() => setIsMenuOpen(false)}>Home</Link>
+      <Link href="/branches" className="text-gray-700 hover:text-primary text-xl font-semibold py-2 px-4 rounded transition" onClick={() => setIsMenuOpen(false)}>Branches</Link>
+      <Link href="/ev-parts" className="text-gray-700 hover:text-primary text-xl font-semibold py-2 px-4 rounded transition" onClick={() => setIsMenuOpen(false)}>EV Parts</Link>
+      <Link href="/ev-kits" className="text-gray-700 hover:text-primary text-xl font-semibold py-2 px-4 rounded transition" onClick={() => setIsMenuOpen(false)}>EV Kits</Link>
+      <Link href="/solar-parts" className="text-gray-700 hover:text-primary text-xl font-semibold py-2 px-4 rounded transition" onClick={() => setIsMenuOpen(false)}>Solar Parts</Link>
+      <Link href="/ev-batteries" className="text-gray-700 hover:text-primary text-xl font-semibold py-2 px-4 rounded transition" onClick={() => setIsMenuOpen(false)}>EV Batteries</Link>
+      <Link href="/solar-batteries" className="text-gray-700 hover:text-primary text-xl font-semibold py-2 px-4 rounded transition" onClick={() => setIsMenuOpen(false)}>Solar Batteries</Link>
+      <Link href="/ev-calculator" className="text-gray-700 hover:text-primary text-xl font-semibold py-2 px-4 rounded transition" onClick={() => setIsMenuOpen(false)}>EV Calculator</Link>
+      <Link href="/load-calculator" className="text-gray-700 hover:text-primary text-xl font-semibold py-2 px-4 rounded transition" onClick={() => setIsMenuOpen(false)}>Load Calculator</Link>
+      <Link href="/about" className="text-gray-700 hover:text-primary text-xl font-semibold py-2 px-4 rounded transition" onClick={() => setIsMenuOpen(false)}>About Us</Link>
+      <Link href="/cart" className="text-gray-700 hover:text-primary text-xl font-semibold py-2 px-4 rounded transition" onClick={() => setIsMenuOpen(false)}>Cart</Link>
     </div>
   </div>
 )}

@@ -9,6 +9,17 @@ export default function Navigation() {
   const [showSearch, setShowSearch] = useState(false);
   const [search, setSearch] = useState("");
 
+  // موبائل مینیو یا سرچ اوورلے اوپن ہونے پر body scroll disable
+  React.useEffect(() => {
+    if (isMenuOpen || showSearch) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    // صفائی (cleanup)
+    return () => { document.body.style.overflow = ''; };
+  }, [isMenuOpen, showSearch]);
+
   return (
     <nav className="backdrop-blur-lg bg-white/70 shadow-lg fixed w-full z-50 border-b-0 h-14 sm:h-16 flex items-center">
       {/* برانڈنگ: Army Wide + Orange Gradient */}
@@ -88,28 +99,35 @@ export default function Navigation() {
 
       {/* موبائل مینو */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-[999] bg-black/40 backdrop-blur-sm">
-          <div className="absolute top-0 left-0 w-64 bg-white h-full shadow-lg p-4 flex flex-col gap-2">
-            {/* برانڈنگ */}
-            <div className="flex items-center gap-2 mb-4">
-              <img src="/logo.png" alt="Pak EV Logo" className="h-10 w-auto" />
-              <span className="font-army text-gradient-orange text-xl font-bold tracking-wide leading-tight whitespace-nowrap flex-shrink-0">PAK EV</span>
-            </div>
-            {/* مینو لنکس */}
-            <Link href="/" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Home</Link>
-            <Link href="/branches" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Branches</Link>
-            <Link href="/ev-parts" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Parts</Link>
-            <Link href="/ev-kits" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Kits</Link>
-            <Link href="/solar-parts" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Solar Parts</Link>
-            <Link href="/ev-batteries" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Batteries</Link>
-            <Link href="/solar-batteries" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Solar Batteries</Link>
-            <Link href="/ev-calculator" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Calculator</Link>
-            <Link href="/load-calculator" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Load Calculator</Link>
-            <Link href="/about" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>About Us</Link>
-            <Link href="/cart" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Cart</Link>
-          </div>
-        </div>
-      )}
+  // موبائل مینیو اوپن: overlay پر click سے مینیو بند، drawer w-full max-w-xs
+  <div className="fixed inset-0 z-[999] flex">
+    {/* overlay */}
+    <div
+      className="flex-1 bg-black/40 backdrop-blur-sm"
+      onClick={() => setIsMenuOpen(false)}
+    />
+    {/* drawer */}
+    <div className="relative bg-white h-full shadow-lg p-4 flex flex-col gap-2 w-full max-w-xs animate-slideInLeft">
+      {/* برانڈنگ */}
+      <div className="flex items-center gap-2 mb-4">
+        <img src="/logo.png" alt="Pak EV Logo" className="h-10 w-auto" />
+        <span className="font-army text-gradient-orange text-xl font-bold tracking-wide leading-tight whitespace-nowrap flex-shrink-0">PAK EV</span>
+      </div>
+      {/* مینو لنکس */}
+      <Link href="/" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Home</Link>
+      <Link href="/branches" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Branches</Link>
+      <Link href="/ev-parts" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Parts</Link>
+      <Link href="/ev-kits" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Kits</Link>
+      <Link href="/solar-parts" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Solar Parts</Link>
+      <Link href="/ev-batteries" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Batteries</Link>
+      <Link href="/solar-batteries" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Solar Batteries</Link>
+      <Link href="/ev-calculator" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>EV Calculator</Link>
+      <Link href="/load-calculator" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Load Calculator</Link>
+      <Link href="/about" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>About Us</Link>
+      <Link href="/cart" className="block text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-medium" onClick={() => setIsMenuOpen(false)}>Cart</Link>
+    </div>
+  </div>
+)}
 
       {/* سرچ اوورلے */}
       {showSearch && (

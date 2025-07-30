@@ -7,57 +7,6 @@ export default function Navigation() {
     </nav>
   );
 }
-
-  // Close search modal on ESC
-  React.useEffect(() => {
-    if (!showSearch) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setShowSearch(false);
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [showSearch]);
-
-  return (
-    <nav>
-      Test
-    </nav>
-  )
-      {/* Animated gradient border */}
-      <div className="absolute left-0 right-0 bottom-0 h-1 z-50">
-        <div className="w-full h-full animate-gradient-x bg-gradient-to-r from-primary via-green-400 to-blue-400 bg-[length:200%_100%]" style={{borderRadius:2}} />
-      </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* ہیڈر کی چوڑائی موبائل پر کم */}
-{/* موبائل پر header اور menu layout بہتر */}
-<div className="flex justify-between items-center h-14 sm:h-16 w-full">
-          <div className="flex">
-            <Link href="/" className="flex items-center gap-8 group">
-              {/* لوگو کا سائز موبائل پر کم */}
-<img src="/logo.png" alt="Pak EV Logo" className="h-12 w-auto sm:h-16" />
-{/* اصل Pak EV برانڈنگ: Stardos Stencil، اوریجنل color */}
-{/* برانڈنگ: ہمیشہ Stardos Stencil (font-army) میں */}
-{/* برانڈنگ: Army Wide + Orange Gradient */}
-<span className="font-army text-gradient-orange text-xl sm:text-2xl font-bold tracking-wide leading-tight whitespace-nowrap flex-shrink-0" style={{letterSpacing: '1px', maxWidth: '110px'}} data-testid="nav-brand">PAK EV</span>
-            </Link>
-
-          </div>
-
-          {/* Desktop + Mobile: Cart ہمیشہ header میں right پر */}
-          <div className="flex items-center space-x-2">
-  {/* Cart Icon (ہمیشہ visible) */}
-  <Link href="/cart" className="relative ml-2 flex items-center group">
-    <ShoppingCartIcon className="h-7 w-7 sm:h-7 sm:w-7 h-6 w-6 text-gray-700 hover:text-primary transition-colors" />
-    <CartBadge />
-  </Link>
-  <button
-    className="p-2 rounded-full hover:bg-primary/10 transition-colors focus:outline-none mr-2"
-    aria-label="Search"
-    onClick={() => setShowSearch(true)}
-  >
-    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-  </button>
-  {/* Hamburger menu button (صرف mobile پر) */}
   <div className="md:hidden flex items-center">
     <button
       onClick={() => setIsMenuOpen(!isMenuOpen)}

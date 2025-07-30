@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-50`} suppressHydrationWarning={true}>
+      <body className={inter.className} suppressHydrationWarning={true}>
         <CartProvider>
           <Navigation />
           <main className="pt-16">

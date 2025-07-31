@@ -1,16 +1,15 @@
 "use client";
-import React, { useState } from 'react';
 import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
 
-// Pak EV Navigation/Header Component
+// Classic Pak EV Navigation - Urdu comments included
 export default function Navigation() {
-  // مینو اور سرچ اسٹیٹ
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   // موبائل مینیو یا سرچ اوورلے اوپن ہونے پر body scroll disable
-  React.useEffect(() => {
+  useEffect(() => {
     if (isMenuOpen || showSearch) {
       document.body.style.overflow = 'hidden';
     } else {

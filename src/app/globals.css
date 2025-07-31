@@ -52,3 +52,9 @@ body {
     transform: translateY(0);
   }
 }
+
+/* DEBUG: Force all backgrounds transparent to enable overlay blur */
+html, body, main, section, div {
+  background: transparent !important;
+}
+

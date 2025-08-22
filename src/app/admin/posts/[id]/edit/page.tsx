@@ -106,7 +106,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
       const description = formData.get('description') as string;
       const price = formData.get('price') as string;
       const featured = formData.get('featured') === 'on';
-      const isMainPromo = formData.get('isMainPromo') === 'on' || formData.get('isMainPromo') === true;
+      const isMainPromo = formData.get('isMainPromo') === 'on';
       let promoSlot: number | null = null;
       const promoSlotRaw = formData.get('promoSlot');
       if (promoSlotRaw !== undefined && promoSlotRaw !== null && promoSlotRaw !== '') {

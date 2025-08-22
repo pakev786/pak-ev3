@@ -10,6 +10,8 @@ export interface Post {
   featured?: boolean;
   pinned?: boolean;
   highlight?: boolean;
+  isMainPromo?: boolean; // ہوم پیج کی سب سے بڑی پرومو پوسٹ
+  promoSlot?: 1 | 2 | 3 | 4 | null; // ہوم پیج کے چار چھوٹے پرومو سلاٹس
 }
 
 export default Post

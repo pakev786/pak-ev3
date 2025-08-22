@@ -7,7 +7,7 @@ export default function LoadCalculatorPage() {
     <main className="min-h-screen bg-white">
       <div className="bg-primary/10 py-2">
         <div className="container mx-auto px-2">
-          <h1 className="text-2xl font-bold mb-2 text-center">Pak EV Load Calculator</h1>
+          {/* اوپر والا ٹائٹل (Pak EV Load Calculator) ہٹا دیا گیا */}
         </div>
       </div>
       <section className="pt-1 pb-4">

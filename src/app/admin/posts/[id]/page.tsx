@@ -17,6 +17,8 @@ interface Post {
   galleryImages: string[];
   createdAt: string;
   updatedAt: string;
+  isMainPromo?: boolean;
+  promoSlot?: 1 | 2 | 3 | 4 | null;
 }
 
 export default function ViewPostPage({ params }: { params: { id: string } }) {
@@ -142,6 +144,19 @@ export default function ViewPostPage({ params }: { params: { id: string } }) {
               )}
 
               <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {/* --- پرومو اسٹیٹس --- */}
+                <div className="sm:col-span-2">
+                  <dt className="text-sm font-medium text-gray-500">پروموشن اسٹیٹس</dt>
+                  <dd className="mt-1 text-lg">
+                    {post.isMainPromo ? (
+                      <span className="text-green-700 font-bold">مین پرومو پوسٹ (سب سے بڑی)</span>
+                    ) : post.promoSlot ? (
+                      <span className="text-blue-700 font-bold">پروموٹڈ پوسٹ (سلاٹ {post.promoSlot})</span>
+                    ) : (
+                      <span className="text-gray-500">نارمل پوسٹ</span>
+                    )}
+                  </dd>
+                </div>
                 <div>
                   <dt className="text-sm font-medium text-gray-500">Category</dt>
                   <dd className="mt-1 text-lg text-gray-900">

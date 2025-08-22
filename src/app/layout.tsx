@@ -3,7 +3,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import { Metadata } from 'next'
 import AuthProvider from '@/providers/SessionProvider'
-import WhatsappChatButton from '@/components/WhatsappChatButton'
+
 import Navigation from '@/components/Navigation'
 import { CartProvider } from '@/components/CartContext'
 
@@ -24,10 +24,10 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning={true}>
         <CartProvider>
           <Navigation />
-          <main className="pt-16 bg-transparent">
+          <main className="pt-0 bg-transparent">
             <AuthProvider>{children}</AuthProvider>
           </main>
-          <WhatsappChatButton />
+
         </CartProvider>
       </body>
     </html>

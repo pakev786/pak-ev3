@@ -70,7 +70,20 @@ export async function POST(request: Request) {
     console.log('Database selected successfully');
 
     const collection = db.collection('posts');
-    
+       // --- پرومو فیلڈز لیں ---
+    const isMainPromo = !!body.isMainPromo;
+    const promoSlot = typeof body.promoSlot === 'number' && [1,2,3,4].includes(body.promoSlot) ? body.promoSlot : null;
+
+    // --- uniqueness enforcement ---
+    if (isMainPromo) {
+      // پہلے سے موجود مین پرومو کو ہٹا دیں
+      await collection.updateMany({ isMainPromo: true }, { $set: { isMainPromo: false } });
+    }
+    if (promoSlot) {
+      // اسی سلاٹ پر موجود پروموٹڈ پوسٹ کو ہٹا دیں
+      await collection.updateMany({ promoSlot }, { $set: { promoSlot: null } });
+    }
+
     const result = await collection.insertOne({
       title: body.title,
       category: body.category,
@@ -82,7 +95,9 @@ export async function POST(request: Request) {
       updatedAt: new Date().toISOString(),
       featured,
       pinned,
-      highlight
+      highlight,
+      isMainPromo,
+      promoSlot
     });
 
     console.log('Insert result:', result);

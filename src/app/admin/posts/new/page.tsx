@@ -12,6 +12,9 @@ export default function NewPostPage() {
   const [titleImagePreview, setTitleImagePreview] = useState('');
   const [galleryImageFiles, setGalleryImageFiles] = useState<File[]>([]);
   const [galleryImagePreviews, setGalleryImagePreviews] = useState<string[]>([]);
+  // --- پرومو پوسٹ لوکل اسٹیٹ ---
+  const [promoType, setPromoType] = useState<'main' | 'none' | `slot1` | `slot2` | `slot3` | `slot4`>("none");
+  const [promoSlot, setPromoSlot] = useState<1 | 2 | 3 | 4 | null>(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -94,6 +97,7 @@ export default function NewPostPage() {
         );
       }
 
+      // --- پرومو فیلڈز فارم ڈیٹا میں شامل کریں ---
       const postData = {
         title,
         category,
@@ -104,7 +108,10 @@ export default function NewPostPage() {
         featured,
         pinned,
         highlight,
+        isMainPromo: promoType === 'main',
+        promoSlot: promoType.startsWith('slot') ? promoSlot : null,
       };
+
 
       const response = await fetch('/api/posts', {
         method: 'POST',
@@ -269,7 +276,57 @@ export default function NewPostPage() {
                   )}
                 </div>
 
-                {/* Feature checkboxes */}
+                {/* --- پروموشن پوسٹ سیٹنگز (اردو میں وضاحت) --- */}
+                <div className="mb-6">
+                  <div className="mb-2 font-semibold text-gray-700">پرومو پوسٹ سیٹنگز</div>
+                  <div className="flex flex-col md:flex-row gap-6">
+                    {/* مین پرومو پوسٹ (صرف ایک) */}
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="promoType"
+                        value="main"
+                        checked={promoType === 'main'}
+                        onChange={() => { setPromoType('main'); setPromoSlot(null); }}
+                        className="form-radio h-5 w-5 text-primary"
+                      />
+                      <span>مین پرومو پوسٹ (سب سے بڑی)</span>
+                    </label>
+                    {/* چار چھوٹے پرومو سلاٹس */}
+                    <div className="flex items-center gap-3">
+                      <span>پروموٹڈ پوسٹ (1-4):</span>
+                      {[1,2,3,4].map(slot => (
+                        <label key={slot} className="flex items-center gap-1">
+                          <input
+                            type="radio"
+                            name="promoType"
+                            value={`slot${slot}`}
+                            checked={promoType === `slot${slot}`}
+                            onChange={() => { setPromoType(`slot${slot}` as any); setPromoSlot(slot as 1|2|3|4); }}
+                            className="form-radio h-5 w-5 text-primary"
+                            disabled={promoType === 'main'}
+                          />
+                          <span>{slot}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {/* نارمل پوسٹ */}
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="promoType"
+                        value="none"
+                        checked={promoType === 'none'}
+                        onChange={() => { setPromoType('none'); setPromoSlot(null); }}
+                        className="form-radio h-5 w-5 text-primary"
+                      />
+                      <span>نارمل پوسٹ</span>
+                    </label>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">ایک وقت میں یا تو مین پرومو یا چار میں سے ایک پروموٹڈ سلاٹ منتخب ہو سکتا ہے۔</div>
+                </div>
+
+                {/* باقی فیچر چیک باکسز */}
                 <div className="flex gap-6 mb-6">
                   <label className="flex items-center gap-2">
                     <input type="checkbox" name="featured" className="form-checkbox h-5 w-5 text-primary" />

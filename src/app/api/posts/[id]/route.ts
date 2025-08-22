@@ -26,6 +26,24 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     const db = client.db('pakev');
     const collection = db.collection('posts');
     
+    // --- پرومو فیلڈز لیں ---
+    // isMainPromo: accept true/'true'/1/'on' as true, else false
+    const isMainPromo = body.isMainPromo === true || body.isMainPromo === 'true' || body.isMainPromo === 1 || body.isMainPromo === 'on';
+    // promoSlot: accept 1-4 as number (from string/number), else null
+    let promoSlot = null;
+    if (body.promoSlot !== undefined && body.promoSlot !== null && body.promoSlot !== '') {
+      const slotNum = Number(body.promoSlot);
+      if ([1,2,3,4].includes(slotNum)) promoSlot = slotNum;
+    }
+    // --- uniqueness enforcement ---
+    if (isMainPromo) {
+      // اس پوسٹ کے علاوہ سب سے isMainPromo ہٹا دیں
+      await collection.updateMany({ _id: { $ne: new ObjectId(params.id) }, isMainPromo: true }, { $set: { isMainPromo: false } });
+    }
+    if (promoSlot) {
+      // اسی سلاٹ پر موجود اور اس پوسٹ کے علاوہ سب سے promoSlot ہٹا دیں
+      await collection.updateMany({ _id: { $ne: new ObjectId(params.id) }, promoSlot }, { $set: { promoSlot: null } });
+    }
     const result = await collection.updateOne(
       { _id: new ObjectId(params.id) },
       { 
@@ -34,7 +52,9 @@ export async function PUT(request: Request, { params }: { params: { id: string }
           featured: typeof body.featured === 'boolean' ? body.featured : false,
           pinned: typeof body.pinned === 'boolean' ? body.pinned : false,
           highlight: typeof body.highlight === 'boolean' ? body.highlight : false,
-          updatedAt: new Date()
+          updatedAt: new Date(),
+          isMainPromo,
+          promoSlot
         }
       }
     );

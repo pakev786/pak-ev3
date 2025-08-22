@@ -34,57 +34,8 @@ const features: Feature[] = [
 ]
 
 const Features: React.FC = () => {
-  return (
-    <section className="py-20">
-      <div className="container mx-auto px-4">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.7 }}
-          transition={{ duration: 0.7, ease: 'easeOut' }}
-        >
-          <motion.h2
-            className="text-4xl font-bold mb-4"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: 'easeOut' }}
-          >
-            Why Choose Us
-          </motion.h2>
-          <motion.p
-            className="text-gray-600 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
-          >
-            Experience the future of electric vehicle charging with our advanced technology
-          </motion.p>
-        </motion.div>
+  // سیکشن مکمل طور پر خالی کر دیا گیا ہے (ہوم پیج سے فیچرز اور ٹیکسٹ ہٹا دیے گئے)
+  return null;
+};
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, index) => (
-            <motion.div
-              key={feature.title}
-              className="group text-center"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.6, delay: 0.15 * index, ease: 'easeOut' }}
-            >
-              <div className="transform transition-transform duration-300 hover:scale-105">
-                <div className="inline-block p-4 bg-primary/10 rounded-full mb-4">
-                  <feature.icon className="w-8 h-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors duration-300">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-export default Features
+export default Features;

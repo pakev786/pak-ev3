@@ -17,9 +17,7 @@ const Hero: React.FC<HeroProps> = ({
 }) => {
   return (
     <section className="relative">
-      {/* Hero Image Slider */}
-      <HeroSlider />
-
+      {/* Hero Image Slider ہٹا دیا گیا */}
       {/* Hero Content */}
       <div className="absolute inset-0 z-10 bg-black/40">
         <Container className="h-full flex flex-col justify-center">

@@ -5,10 +5,10 @@ import React from 'react'
 export default function EVCalculatorPage() {
   return (
     <main className="min-h-screen bg-white">
-      <div className="bg-primary/10 py-4">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-2">EV Calculator</h1>
-          <p className="text-xl text-gray-600">
+      <div className="bg-primary/10 py-0">
+        <div className="container mx-auto px-4 my-0">
+          {/* اوپر اور نیچے بالکل کم سے کم اسپیس، لائن ہائٹ بھی کم */}
+          <p className="text-xl text-gray-600 m-0 p-0 leading-tight" style={{paddingTop: '2px', paddingBottom: '2px'}}>
             Calculate the cost of converting your bike to electric
           </p>
         </div>

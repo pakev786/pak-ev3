@@ -106,8 +106,13 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
       const description = formData.get('description') as string;
       const price = formData.get('price') as string;
       const featured = formData.get('featured') === 'on';
-      const pinned = formData.get('pinned') === 'on';
-      const highlight = formData.get('highlight') === 'on';
+      const isMainPromo = formData.get('isMainPromo') === 'on' || formData.get('isMainPromo') === true;
+      let promoSlot: number | null = null;
+      const promoSlotRaw = formData.get('promoSlot');
+      if (promoSlotRaw !== undefined && promoSlotRaw !== null && promoSlotRaw !== '') {
+        const slotNum = Number(promoSlotRaw);
+        if ([1,2,3,4].includes(slotNum)) promoSlot = slotNum;
+      }
 
       if (!title || !category || !description || !price) {
         setError('Please fill in all required fields');
@@ -139,8 +144,8 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
           imageUrl,
           galleryImages, // <-- include gallery images
           featured,
-          pinned,
-          highlight,
+          isMainPromo,
+          promoSlot
         }),
       });
 
@@ -338,12 +343,20 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
                     Show on Home
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" name="pinned" className="form-checkbox h-5 w-5 text-primary" defaultChecked={post?.pinned} />
-                    Pin this post
+                    <input type="checkbox" name="isMainPromo" className="form-checkbox h-5 w-5 text-green-600" defaultChecked={post?.isMainPromo} />
+                    <span className="text-green-700 font-bold">مین پرومو پوسٹ</span>
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" name="highlight" className="form-checkbox h-5 w-5 text-primary" defaultChecked={post?.highlight} />
-                    Highlight
+                    <span className="text-blue-700 font-bold">پرومو سلاٹ (1-4):</span>
+                    <input
+                      type="number"
+                      name="promoSlot"
+                      min={1}
+                      max={4}
+                      className="form-input w-16 text-center border rounded"
+                      defaultValue={post?.promoSlot || ''}
+                      placeholder="-"
+                    />
                   </label>
                 </div>
                 <button

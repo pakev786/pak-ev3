@@ -14,12 +14,14 @@ interface Post {
   price: string;
   category: string;
   imageUrl: string;
-  galleryImages?: string[]; // <-- add gallery images
+  galleryImages?: string[]; // <--- add gallery images
   createdAt: string;
   updatedAt: string;
   featured?: boolean;
   pinned?: boolean;
   highlight?: boolean;
+  isMainPromo?: boolean;
+  promoSlot?: number | null;
 }
 
 // NOTE: The checkboxes for featured, pinned, and highlight are shown near the bottom of the form, pre-filled with the post's current values.

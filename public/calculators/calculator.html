@@ -94,7 +94,7 @@
 
         .row {
             margin-bottom: 1.5rem;
-            padding: 1rem;
+            padding: 0.5rem;
             border: 1px solid var(--border);
             border-radius: 0.5rem;
             background-color: #f9fafb;
@@ -188,6 +188,16 @@
             color: #22c55e;
             font-weight: 700;
             transition: background-color 0.3s ease;
+        }
+        /* Bike dropdown options style like motor kit */
+        select#bikeSelect option[value="70"],
+        select#bikeSelect option[value="100"],
+        select#bikeSelect option[value="110"],
+        select#bikeSelect option[value="125"],
+        select#bikeSelect option[value="150"],
+        select#bikeSelect option[value="200"] {
+            color: #0a0a0a;
+            font-weight: 700;
         }
 
         /* Hover effect for all options */
@@ -399,9 +409,9 @@
         { specs: "48v 100Ah", range: "210km/Charge", price: 192000 }
     ],
     "1000w": [
-        { specs: "48v 20Ah", range: "40km/Charge", price: 43000 },
-        { specs: "48v 25Ah", range: "55km/Charge", price: 54000 },
-        { specs: "48v 30Ah", range: "70km/Charge", price: 62000 },
+        { specs: "48v 20Ah", range: "50km/Charge", price: 43000 },
+        { specs: "48v 25Ah", range: "65km/Charge", price: 54000 },
+        { specs: "48v 30Ah", range: "80km/Charge", price: 62000 },
         { specs: "48v 40Ah", range: "100km/Charge", price: 79000 },
         { specs: "48v 50Ah", range: "125km/Charge", price: 98000 },
         { specs: "48v 60Ah", range: "150km/Charge", price: 117000 },
@@ -727,52 +737,54 @@
                     fittingCharges = 15000;
                 }
 
-                const totalPrice = selectedMotor.price + selectedBattery.price + selectedCharger.price + fittingCharges;
-
                 // Calculate battery box price based on battery specs
                 let batteryBoxPrice = '-';
+                let batteryBoxNumeric = 0;
+                let totalPrice = selectedMotor.price + selectedBattery.price + selectedCharger.price + fittingCharges;
                 if (selectedBattery.specs.startsWith('48v')) {
                     const ah = parseInt(selectedBattery.specs.match(/(\d+)Ah/)[1]);
                     if (ah <= 35) {
-                        batteryBoxPrice = 'Rs. 6,000/-';
+                        batteryBoxPrice = 'Rs. 6,500/-';
                     } else if (ah >= 40 && ah <= 50) {
-                        batteryBoxPrice = 'Rs. 7,000/-';
+                        batteryBoxPrice = 'Rs. 7,500/-';
                     } else if (ah === 60) {
                         batteryBoxPrice = 'Rs. 8,000/-';
                     } else if (ah === 70) {
                         batteryBoxPrice = 'Rs. 9,000/-';
                     } else if (ah === 80) {
                         batteryBoxPrice = 'Rs. 10,000/-';
+                    } else if (ah === 90) {
+                        batteryBoxPrice = 'Rs. 11,000/-';
                     } else if (ah === 100) {
                         batteryBoxPrice = 'Rs. 12,000/-';
                     }
-                } else if (selectedBattery.specs.startsWith('60v')) {
+                } else if (selectedBattery.specs.startsWith('63v')) {
                     const ah = parseInt(selectedBattery.specs.match(/(\d+)Ah/)[1]);
                     if (ah <= 35) {
-                        batteryBoxPrice = 'Rs. 6,000/-';
-                    } else if (ah >= 40 && ah <= 50) {
                         batteryBoxPrice = 'Rs. 7,000/-';
-                    } else if (ah === 60) {
+                    } else if (ah >= 40 && ah <= 50) {
                         batteryBoxPrice = 'Rs. 8,000/-';
+                    } else if (ah === 60) {
+                        batteryBoxPrice = 'Rs. 9,000/-';
                     } else if (ah === 70) {
                         batteryBoxPrice = 'Rs. 9,000/-';
                     } else if (ah === 80) {
                         batteryBoxPrice = 'Rs. 10,000/-';
-                    } else if (ah === 100) {
+                    } else if (ah <= 100) {
                         batteryBoxPrice = 'Rs. 12,000/-';
-                    } else if (ah === 120) {
+                    } else if (ah <= 120) {
                         batteryBoxPrice = 'Rs. 14,000/-';
-                    } else if (ah === 140) {
+                    } else if (ah <= 140) {
                         batteryBoxPrice = 'Rs. 16,000/-';
                     }
                 } else if (selectedBattery.specs.startsWith('72v')) {
                     const ah = parseInt(selectedBattery.specs.match(/(\d+)Ah/)[1]);
                     if (ah <= 35) {
-                        batteryBoxPrice = 'Rs. 6,000/-';
-                    } else if (ah >= 40 && ah <= 50) {
                         batteryBoxPrice = 'Rs. 7,000/-';
-                    } else if (ah === 60) {
+                    } else if (ah >= 40 && ah <= 50) {
                         batteryBoxPrice = 'Rs. 8,000/-';
+                    } else if (ah === 60) {
+                        batteryBoxPrice = 'Rs. 9,000/-';
                     } else if (ah === 70) {
                         batteryBoxPrice = 'Rs. 10,000/-';
                     } else if (ah === 80) {
@@ -783,6 +795,15 @@
                         batteryBoxPrice = 'Rs. 16,000/-';
                     } else if (ah === 140) {
                         batteryBoxPrice = 'Rs. 18,000/-';
+                    }
+                }
+
+                // Parse batteryBoxPrice string to number and add to totalPrice
+                if (typeof batteryBoxPrice === 'string' && batteryBoxPrice.startsWith('Rs.')) {
+                    const match = batteryBoxPrice.replace(/[^\d]/g, '');
+                    if (match) {
+                        batteryBoxNumeric = parseInt(match, 10);
+                        totalPrice += batteryBoxNumeric;
                     }
                 }
 

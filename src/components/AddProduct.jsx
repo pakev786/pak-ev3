@@ -25,13 +25,14 @@ const AddProduct = ({ onCancel, onSuccess, productToEdit = null }) => {
     deliveryTimeMax: 5,
     warranty: 0
   });
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [catRes, secRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/categories'),
-          axios.get('http://localhost:5000/api/sections')
+          axios.get(`${BASE_URL}/api/categories`),
+          axios.get(`${BASE_URL}/api/sections`)
         ]);
         setCategories(catRes.data);
         setSections(secRes.data);
@@ -68,11 +69,11 @@ const AddProduct = ({ onCancel, onSuccess, productToEdit = null }) => {
       });
       
       if (productToEdit.image) {
-        setImagePreview(`http://localhost:5000${productToEdit.image}`);
+        setImagePreview(`${BASE_URL}${productToEdit.image}`);
       }
       
       if (productToEdit.extraImages && productToEdit.extraImages.length > 0) {
-        setExtraPreviews(productToEdit.extraImages.map(img => `http://localhost:5000${img}`));
+        setExtraPreviews(productToEdit.extraImages.map(img => `${BASE_URL}${img}`));
       }
     }
   }, [productToEdit]);
@@ -154,9 +155,9 @@ const AddProduct = ({ onCancel, onSuccess, productToEdit = null }) => {
 
     try {
       if (productToEdit) {
-        await axios.put(`http://localhost:5000/api/products/${productToEdit.id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await axios.put(`${BASE_URL}/api/products/${productToEdit.id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
       } else {
-        await axios.post('http://localhost:5000/api/products', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await axios.post(`${BASE_URL}/api/products`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
       }
       if (onSuccess) onSuccess();
     } catch (error) {

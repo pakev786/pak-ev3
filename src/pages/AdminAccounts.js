@@ -10,7 +10,7 @@ export default function AdminAccounts() {
   // Admin Email State
   const [adminEmail, setAdminEmail] = useState('');
   const [emailLoading, setEmailLoading] = useState(false);
-
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
   // Bank Accounts State
   const [accounts, setAccounts] = useState([]);
   const [bankForm, setBankForm] = useState({
@@ -21,8 +21,8 @@ export default function AdminAccounts() {
   });
   const [bankLoading, setBankLoading] = useState(false);
 
-  const SETTINGS_API = 'http://localhost:5000/api/settings';
-  const BANKS_API = 'http://localhost:5000/api/banks';
+  const SETTINGS_API = `${BASE_URL}/api/settings`;
+  const BANKS_API = `${BASE_URL}/api/banks`;
 
   useEffect(() => {
     fetchData();

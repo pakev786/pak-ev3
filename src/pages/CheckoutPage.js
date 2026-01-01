@@ -24,7 +24,7 @@ export default function CheckoutPage() {
   const [voucherError, setVoucherError] = useState('');
 
   const paymentMethod = location.state?.paymentMethod || 'online';
-  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';;
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
     if (!user) {

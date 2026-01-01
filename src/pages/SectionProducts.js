@@ -9,8 +9,8 @@ export default function SectionProducts() {
   const [loading, setLoading] = useState(true);
   const [sectionName, setSectionName] = useState('');
 
-  const PRODUCTS_API_URL = 'http://localhost:5000/api/products';
   const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';;
+  const PRODUCTS_API_URL = `${BASE_URL}/api/products`;
 
   useEffect(() => {
     const fetchProducts = async () => {

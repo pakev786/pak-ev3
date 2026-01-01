@@ -7,6 +7,7 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';;
 
   // Check if already logged in and redirect
   useEffect(() => {
@@ -20,9 +21,8 @@ export default function AdminLogin() {
     e.preventDefault();
     try {
       // First try to init superadmin if DB is empty (dev convenience)
-      await axios.post('http://localhost:5000/api/admin/init').catch(() => {});
-
-      const res = await axios.post('http://localhost:5000/api/admin/login', { username, password });
+      await axios.post(`${BASE_URL}/api/admin/init`).catch(() => {});
+      const res = await axios.post(`${BASE_URL}/api/admin/login`, { username, password });
       localStorage.setItem('adminUser', JSON.stringify(res.data));
       navigate('/adminHome');
     } catch (err) {

@@ -12,9 +12,9 @@ export default function AdminProducts() {
   const [productToEdit, setProductToEdit] = useState(null);
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  const API_URL = 'http://localhost:5000/api/products';
   // Base URL for images
   const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';;
+  const API_URL = `${BASE_URL}/api/products`;
 
   useEffect(() => {
     fetchProducts();

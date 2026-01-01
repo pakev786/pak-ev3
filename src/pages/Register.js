@@ -18,7 +18,8 @@ export default function Register() {
 
   const navigate = useNavigate();
   const { loginUser } = useCart();
-  const BASE_URL = 'http://localhost:5000/api/auth';
+  const BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const BASE_URL = `${BASE}/api/auth`;
 
   // --- Password Helpers ---
   const validatePassword = (pass) => {

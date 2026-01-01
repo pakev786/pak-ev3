@@ -12,7 +12,8 @@ export default function AdminCategories() {
   const [loading, setLoading] = useState(false);
 
   const catInputRef = useRef(null);
-  const CAT_API_URL = 'http://localhost:5000/api/categories';
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const CAT_API_URL = `${BASE_URL}/api/categories`;
 
   useEffect(() => {
     fetchData();

@@ -30,10 +30,10 @@ export default function AdminHome() {
   const [draggedSectionIndex, setDraggedSectionIndex] = useState(null);
   const secInputRef = useRef(null);
 
-  const BANNERS_API_URL = 'http://localhost:5000/api/banners';
-  const SEC_API_URL = 'http://localhost:5000/api/sections';
-  const CAT_API_URL = 'http://localhost:5000/api/categories';
   const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';;
+  const BANNERS_API_URL = `${BASE_URL}/api/banners`;
+  const SEC_API_URL = `${BASE_URL}/api/sections`;
+  const CAT_API_URL = `${BASE_URL}/api/categories`;
 
   const STATIC_ROUTES = [
     { label: 'EV Calculator', value: '/ev-calculator' },
@@ -45,7 +45,6 @@ export default function AdminHome() {
     fetchData();
   }, []);
 
-  // Section click outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (secInputRef.current && !secInputRef.current.contains(event.target)) {

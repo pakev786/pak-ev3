@@ -17,8 +17,10 @@ const Navbar = () => {
   const cartCount = getCartCount();
 
   const navigate = useNavigate();
-  const API_URL = 'http://localhost:5000/api/categories';
-  const SETTINGS_API = 'http://localhost:5000/api/settings';
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+  const API_URL = `${BASE_URL}/api/categories`;
+  const SETTINGS_API = `${BASE_URL}/api/settings`;
 
   useEffect(() => {
     const fetchData = async () => {

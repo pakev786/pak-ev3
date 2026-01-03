@@ -3,6 +3,12 @@ import Navbar from '../components/Navbar';
 
 const branches = [
   {
+    city: "Head Rajkan",
+    holder: "Mr Jawad Ashraf",
+    phone: "3247025901",
+    address: "4F5V+VMH PAK EV in the back of ZTBL, Rajkan, Pakistan"
+  },
+  {
     city: "Karachi",
     holder: "Hafiz Sajjad",
     phone: "3020029229",
@@ -25,12 +31,6 @@ const branches = [
     holder: "Mr Khubab",
     phone: "3253836600",
     address: "Giri Ganj Bazaar, Mohallah Islampura, Old City, Bahawalpur"
-  },
-  {
-    city: "Head Rajkan",
-    holder: "Mr Jawad Ashraf",
-    phone: "3247025901",
-    address: "4F5V+VMH PAK EV in the back of ZTBL, Rajkan, Pakistan"
   },
   {
     city: "Sialkot",

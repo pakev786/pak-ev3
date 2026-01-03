@@ -10,31 +10,31 @@ const branches = [
   },
   {
     city: "Lahore",
-    holder: "Waqas Ali",
+    holder: "Mr Waqas Ali",
     phone: "3312416728",
     address: "Pak ev Nishat colony near milad chock nala wali side Lahore"
   },
   {
     city: "Rawalpindi",
-    holder: "Waqas Ali",
+    holder: "Mr Waqas Ali",
     phone: "0331-8265818",
     address: "Shop#K19, Bobi Pan Wali Gali, cometee Chock, Main Muree Road Rawalpindi"
   },
   {
     city: "Bahawalpur",
-    holder: "Khubab",
+    holder: "Mr Khubab",
     phone: "3253836600",
     address: "Giri Ganj Bazaar, Mohallah Islampura, Old City, Bahawalpur"
   },
   {
     city: "Head Rajkan",
-    holder: "Jawad Ashraf",
+    holder: "Mr Jawad Ashraf",
     phone: "3247025901",
     address: "4F5V+VMH PAK EV in the back of ZTBL, Rajkan, Pakistan"
   },
   {
     city: "Sialkot",
-    holder: "Qamar Hussain",
+    holder: "Mr Qamar Hussain",
     phone: "0315 9535444",
     address: "Near Zamzam Bakery Adda Rangpur Puli Gondal Road Sialkot"
   },
@@ -46,49 +46,49 @@ const branches = [
   },
   {
     city: "Faisalabad",
-    holder: "Abu Huraira",
+    holder: "Mr Abu Huraira",
     phone: "3000611830",
     address: "Rasool Park, Near Al-Noor Garden Gate No. #2, Madina Town, Faisalabad"
   },
   {
     city: "Dera Ghazi Khan",
-    holder: "Tahir Iqbal",
+    holder: "Mr Tahir Iqbal",
     phone: "3346736216",
     address: "Khayaban E Sarwar Block A Near TopSun office Dera Ghazi Khan"
   },
   {
     city: "Charsadda",
-    holder: "Tayyab",
+    holder: "Mr Tayyab",
     phone: "3339062638",
     address: "Near Ali plaza mardan road charsadda"
   },
   {
     city: "Bakkar",
-    holder: "Rao Qaiser",
+    holder: "Mr Rao Qaiser",
     phone: "3324139152",
     address: "Near Railway Football Ground Tehsil Kalur Kot District Bhakkar"
   },
   {
     city: "Talagang",
-    holder: "Umer",
+    holder: "Mr Umer",
     phone: "3318265818",
     address: "Minhaj chowk V.p.o Saghar tehsil Talagang disst Talagang"
   },
   {
-    city: "Lakkimarwat",
-    holder: "Tanveer Khan",
+    city: "Lakki Marwat",
+    holder: "Mr Tanveer Khan",
     phone: "3499619243",
     address: "Workshop No.19 Sarai gambilla bazar Near sarai gambilla pump (kpk) lakki marwat"
   },
   {
     city: "Kotmomin",
-    holder: "Kamran Bilal",
+    holder: "Mr Kamran Bilal",
     phone: "3006066398",
     address: "Mashraqi Bazar bhabra Sialvi Attar house"
   },
   {
     city: "Toba Tek Singh",
-    holder: "Asad Virk",
+    holder: "Mr Asad Virk",
     phone: "3097641402",
     address: "Pak EV Warayam Wala Road Near Rehmat Petroleum Toba Tek Singh"
   },
@@ -100,25 +100,25 @@ const branches = [
   },
   {
     city: "Melsi",
-    holder: "M Shoukat",
+    holder: "Mr Muhammad Shoukat",
     phone: "3003767242",
     address: "Colony Chowk Kahror Pakka, Road fine city town Melsi"
   },
   {
     city: "Sadiqabad",
-    holder: "Javeed",
+    holder: "Ustad Javed Sahib",
     phone: "3087985302",
     address: "Javed motor workshop near big Bazar sadiqabad"
   },
   {
     city: "Islamabad",
-    holder: "Engr Ajmal",
+    holder: "Mr Engr Ajmal",
     phone: "3308512718",
     address: ""
   },
   {
     city: "Nowshera",
-    holder: "Waqas Ali",
+    holder: "Mr Waqas Ali",
     phone: "3312416728",
     address: ""
   }

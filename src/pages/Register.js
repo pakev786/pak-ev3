@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google'; 
 import Navbar from '../components/Navbar';
 import { useCart } from '../context/CartContext';
 
@@ -11,17 +12,15 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
-  // Password Constraints State
   const [passConstraints, setPassConstraints] = useState({
     length: false, upper: false, number: false, special: false
   });
 
   const navigate = useNavigate();
   const { loginUser } = useCart();
-  const BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-  const BASE_URL = `${BASE}/api/auth`;
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const API_AUTH = `${BASE_URL}/api/auth`;
 
-  // --- Password Helpers ---
   const validatePassword = (pass) => {
     const checks = {
       length: pass.length >= 8,
@@ -35,10 +34,9 @@ export default function Register() {
 
   const generateStrongPassword = () => {
     const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
-    let pass = "A1!abcdef"; // Ensure base requirements
+    let pass = "A1!abcdef";
     for (let i = 0; i < 6; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
     const finalPass = pass.split('').sort(() => 0.5 - Math.random()).join('').slice(0, 12);
-    
     setFormData(prev => ({ ...prev, password: finalPass }));
     validatePassword(finalPass);
   };
@@ -49,7 +47,6 @@ export default function Register() {
     if (name === 'password') validatePassword(value);
   };
 
-  // --- Handlers ---
   const handleRegister = async (e) => {
     e.preventDefault();
     if (!validatePassword(formData.password)) {
@@ -58,7 +55,7 @@ export default function Register() {
     }
     setLoading(true); setError('');
     try {
-      await axios.post(`${BASE_URL}/register`, formData);
+      await axios.post(`${API_AUTH}/register`, formData);
       setStep(2);
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
@@ -71,7 +68,7 @@ export default function Register() {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      const { data } = await axios.post(`${BASE_URL}/verify-otp`, {
+      const { data } = await axios.post(`${API_AUTH}/verify-otp`, {
         email: formData.email,
         otp
       });
@@ -83,6 +80,27 @@ export default function Register() {
       setLoading(false);
     }
   };
+
+  // --- Google Login Handler ---
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        console.log("Google Sign-up Success", tokenResponse);
+        const { data } = await axios.post(`${API_AUTH}/google`, {
+            access_token: tokenResponse.access_token 
+        });
+        loginUser(data);
+        navigate('/');
+      } catch (err) {
+        console.error("Backend Google Auth Error:", err);
+        setError(err.response?.data?.message || "Google Sign-Up failed on server.");
+      }
+    },
+    onError: (errorResponse) => {
+        console.error("Google Login Failed:", errorResponse);
+        setError("Google Login Failed.");
+    },
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
@@ -98,41 +116,56 @@ export default function Register() {
           {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-6 text-sm text-center">{error}</div>}
 
           {step === 1 ? (
-            <form onSubmit={handleRegister} className="space-y-5">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
-                <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-orange-500" required />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
-                <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-orange-500" required />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
-                <div className="relative">
-                    <input 
-                        type="text" // Initially text so user can see generated pass
-                        name="password" 
-                        value={formData.password} 
-                        onChange={handleInputChange} 
-                        className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-orange-500 pr-24" 
-                        required 
-                    />
-                    <button type="button" onClick={generateStrongPassword} className="absolute right-2 top-2 bottom-2 px-3 bg-gray-100 text-xs font-bold rounded-lg hover:bg-gray-200 text-gray-600">Generate</button>
+            <>
+                <form onSubmit={handleRegister} className="space-y-5">
+                <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
+                    <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-orange-500" required />
                 </div>
-                <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
-                    <span className={passConstraints.length ? "text-green-600 font-bold" : "text-gray-400"}>✓ 8+ Characters</span>
-                    <span className={passConstraints.upper ? "text-green-600 font-bold" : "text-gray-400"}>✓ Uppercase Letter</span>
-                    <span className={passConstraints.number ? "text-green-600 font-bold" : "text-gray-400"}>✓ Number</span>
-                    <span className={passConstraints.special ? "text-green-600 font-bold" : "text-gray-400"}>✓ Special Char</span>
+                <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+                    <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-orange-500" required />
                 </div>
-              </div>
+                
+                <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+                    <div className="relative">
+                        <input 
+                            type="text" 
+                            name="password" 
+                            value={formData.password} 
+                            onChange={handleInputChange} 
+                            className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-orange-500 pr-24" 
+                            required 
+                        />
+                        <button type="button" onClick={generateStrongPassword} className="absolute right-2 top-2 bottom-2 px-3 bg-gray-100 text-xs font-bold rounded-lg hover:bg-gray-200 text-gray-600">Generate</button>
+                    </div>
+                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                        <span className={passConstraints.length ? "text-green-600 font-bold" : "text-gray-400"}>✓ 8+ Characters</span>
+                        <span className={passConstraints.upper ? "text-green-600 font-bold" : "text-gray-400"}>✓ Uppercase Letter</span>
+                        <span className={passConstraints.number ? "text-green-600 font-bold" : "text-gray-400"}>✓ Number</span>
+                        <span className={passConstraints.special ? "text-green-600 font-bold" : "text-gray-400"}>✓ Special Char</span>
+                    </div>
+                </div>
 
-              <button type="submit" disabled={loading} className="w-full py-3 bg-black text-white font-bold rounded-xl hover:bg-orange-600 transition shadow-lg disabled:opacity-50">
-                {loading ? 'Sending OTP...' : 'Send OTP to Email'}
-              </button>
-            </form>
+                <button type="submit" disabled={loading} className="w-full py-3 bg-black text-white font-bold rounded-xl hover:bg-orange-600 transition shadow-lg disabled:opacity-50">
+                    {loading ? 'Sending OTP...' : 'Send OTP to Email'}
+                </button>
+                </form>
+
+                <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200"></div></div>
+                    <div className="relative flex justify-center text-sm"><span className="px-2 bg-white text-gray-500">Or sign up with</span></div>
+                </div>
+
+                <button 
+                    onClick={() => googleLogin()}
+                    className="w-full py-3 border border-gray-300 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-gray-50 transition"
+                >
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
+                    Google
+                </button>
+            </>
           ) : (
             <form onSubmit={handleVerify} className="space-y-5">
               <div>

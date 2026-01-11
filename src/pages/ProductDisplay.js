@@ -140,8 +140,6 @@ export default function ProductDisplay() {
         <nav className="text-sm text-gray-500 mb-8">
           <Link to="/" className="hover:text-orange-500 transition">Home</Link>
           <span className="mx-2">/</span>
-          <Link to="/categories" className="hover:text-orange-500 transition">Products</Link>
-          <span className="mx-2">/</span>
           <span className="text-gray-900 font-medium">{product.title}</span>
         </nav>
 

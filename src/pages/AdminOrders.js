@@ -8,7 +8,7 @@ export default function AdminOrders() {
   const [activeTab, setActiveTab] = useState('unverified');
   const [zoomedImage, setZoomedImage] = useState(null);
 
-  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';;
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
   const API_URL = `${BASE_URL}/api/orders`;
 
   useEffect(() => {
@@ -42,7 +42,6 @@ export default function AdminOrders() {
   const unverifiedOrders = orders.filter(o => o.status === 'Non Verified');
   const verifiedOrders = orders.filter(o => o.status === 'Verified' || o.status === 'Delivered');
 
-  // Merging Processed and Delivered in one view for simplicity, or keeping tabs
   // Let's stick to tabs logic if previous tabs existed, or simplified:
   const processedOrders = orders.filter(o => o.status === 'Verified');
   const deliveredOrders = orders.filter(o => o.status === 'Delivered');
@@ -109,11 +108,16 @@ export default function AdminOrders() {
                     <div>
                       <span className="block text-gray-400 text-xs uppercase font-bold">Customer</span>
                       <span className="font-semibold block">{order.user?.name || 'Unknown'}</span>
-                      {/* NEW: Shipping Details */}
+                      <span className="text-gray-500">{order.user?.email}</span>
+                      
+                      {/* NEW: Recipient Details */}
                       <div className="mt-2 pt-2 border-t border-gray-200">
-                         <span className="block text-gray-400 text-xs uppercase font-bold">Shipping Info</span>
+                         <span className="block text-gray-400 text-xs uppercase font-bold">Recipient & Shipping</span>
+                         <div className="font-bold text-gray-900">{order.recipientName}</div>
                          <div className="text-gray-800 font-medium">{order.contactNumber}</div>
-                         <div className="text-gray-600 text-xs mt-1 leading-snug">{order.shippingAddress}</div>
+                         <div className="text-gray-600 text-xs mt-1 leading-snug">
+                           {order.shippingAddress}, {order.postalCode}
+                         </div>
                       </div>
                     </div>
                     <div>

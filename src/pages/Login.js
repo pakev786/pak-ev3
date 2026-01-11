@@ -1,29 +1,25 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
 import Navbar from '../components/Navbar';
 import { useCart } from '../context/CartContext';
 
 export default function Login() {
-  // Modes: 'login', 'forgot', 'reset'
   const [view, setView] = useState('login'); 
   const [formData, setFormData] = useState({ email: '', password: '', otp: '', newPassword: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   
-  // Password Validation State
   const [passConstraints, setPassConstraints] = useState({
-    length: false,
-    upper: false,
-    number: false,
-    special: false
+    length: false, upper: false, number: false, special: false
   });
 
   const navigate = useNavigate();
   const { loginUser } = useCart();
-  const BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-  const BASE_URL = `${BASE}/api/auth`;
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const API_AUTH = `${BASE_URL}/api/auth`;
 
   // --- Password Helpers ---
   const validatePassword = (pass) => {
@@ -39,27 +35,16 @@ export default function Login() {
 
   const generateStrongPassword = () => {
     const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
-    let pass = "";
-    // Ensure at least one of each required type
-    pass += "A"; // Upper
-    pass += "1"; // Number
-    pass += "!"; // Special
-    pass += "abcdefg"; // Padding length
-
-    // Shuffle and fill rest randomly
-    for (let i = 0; i < 8; i++) {
-        pass += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    // Simple shuffle logic or just append randoms
+    let pass = "A1!abcdef"; 
+    for (let i = 0; i < 6; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
     const finalPass = pass.split('').sort(() => 0.5 - Math.random()).join('').slice(0, 12);
-    
-    setFormData({ ...formData, newPassword: finalPass });
+    setFormData(prev => ({ ...prev, newPassword: finalPass }));
     validatePassword(finalPass);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData(prev => ({ ...prev, [name]: value }));
     if (name === 'newPassword') validatePassword(value);
   };
 
@@ -68,7 +53,7 @@ export default function Login() {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      const { data } = await axios.post(`${BASE_URL}/login`, { 
+      const { data } = await axios.post(`${API_AUTH}/login`, { 
         email: formData.email, 
         password: formData.password 
       });
@@ -81,11 +66,35 @@ export default function Login() {
     }
   };
 
+  // --- Google Login Handler ---
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        console.log("Google Login Success, getting user info...", tokenResponse);
+        // Send access token to backend to verify and create user
+        const { data } = await axios.post(`${API_AUTH}/google`, {
+            access_token: tokenResponse.access_token 
+        });
+        loginUser(data);
+        navigate('/');
+      } catch (err) {
+        console.error("Backend Google Auth Error:", err);
+        setError(err.response?.data?.message || "Google login failed on server.");
+      }
+    },
+    onError: (errorResponse) => {
+        console.error("Google Login Failed:", errorResponse);
+        setError("Google Login Failed. Check console for details.");
+    },
+    // flow: 'implicit' is default, which returns access_token. 
+    // This is simpler for client-side apps without complex backend session management.
+  });
+
   const handleForgotRequest = async (e) => {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      await axios.post(`${BASE_URL}/forgot-password`, { email: formData.email });
+      await axios.post(`${API_AUTH}/forgot-password`, { email: formData.email });
       setView('reset');
       setSuccessMsg(`OTP sent to ${formData.email}`);
     } catch (err) {
@@ -103,7 +112,7 @@ export default function Login() {
     }
     setLoading(true); setError('');
     try {
-      await axios.post(`${BASE_URL}/reset-password`, { 
+      await axios.post(`${API_AUTH}/reset-password`, { 
         email: formData.email, 
         otp: formData.otp, 
         newPassword: formData.newPassword 
@@ -140,22 +149,37 @@ export default function Login() {
 
           {/* VIEW: LOGIN */}
           {view === 'login' && (
-            <form onSubmit={handleLogin} className="space-y-5">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
-                <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-orange-500" required />
-              </div>
-              <div>
-                <div className="flex justify-between mb-1">
-                  <label className="text-sm font-semibold text-gray-700">Password</label>
-                  <button type="button" onClick={() => setView('forgot')} className="text-xs text-orange-600 font-bold hover:underline">Forgot?</button>
+            <>
+              <form onSubmit={handleLogin} className="space-y-5">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-orange-500" required />
                 </div>
-                <input type="password" name="password" value={formData.password} onChange={handleInputChange} className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-orange-500" required />
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <label className="text-sm font-semibold text-gray-700">Password</label>
+                    <button type="button" onClick={() => setView('forgot')} className="text-xs text-orange-600 font-bold hover:underline">Forgot?</button>
+                  </div>
+                  <input type="password" name="password" value={formData.password} onChange={handleInputChange} className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-orange-500" required />
+                </div>
+                <button type="submit" disabled={loading} className="w-full py-3 bg-black text-white font-bold rounded-xl hover:bg-orange-600 transition shadow-lg disabled:opacity-50">
+                  {loading ? 'Logging in...' : 'Log In'}
+                </button>
+              </form>
+
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200"></div></div>
+                <div className="relative flex justify-center text-sm"><span className="px-2 bg-white text-gray-500">Or continue with</span></div>
               </div>
-              <button type="submit" disabled={loading} className="w-full py-3 bg-black text-white font-bold rounded-xl hover:bg-orange-600 transition shadow-lg disabled:opacity-50">
-                {loading ? 'Logging in...' : 'Log In'}
+
+              <button 
+                onClick={() => googleLogin()}
+                className="w-full py-3 border border-gray-300 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-gray-50 transition"
+              >
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
+                Google
               </button>
-            </form>
+            </>
           )}
 
           {/* VIEW: FORGOT (Request OTP) */}
@@ -186,7 +210,7 @@ export default function Login() {
                 <label className="block text-sm font-semibold text-gray-700 mb-1">New Password</label>
                 <div className="relative">
                     <input 
-                        type="text" // Shown as text initially so user can copy/see generated pass
+                        type="text" 
                         name="newPassword" 
                         value={formData.newPassword} 
                         onChange={handleInputChange} 
@@ -202,7 +226,6 @@ export default function Login() {
                     </button>
                 </div>
                 
-                {/* Password Constraints UI */}
                 <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
                     <span className={passConstraints.length ? "text-green-600 font-bold" : "text-gray-400"}>✓ 8+ Characters</span>
                     <span className={passConstraints.upper ? "text-green-600 font-bold" : "text-gray-400"}>✓ Uppercase Letter</span>

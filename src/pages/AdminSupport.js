@@ -7,11 +7,14 @@ export default function AdminSupport() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [attachment, setAttachment] = useState(null); // New state for file
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
+  const [zoomedImage, setZoomedImage] = useState(null);
   
   const messagesEndRef = useRef(null);
-  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';;
+  const fileInputRef = useRef(null); // Ref for file input
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
     fetchChatUsers();
@@ -19,7 +22,7 @@ export default function AdminSupport() {
 
   useEffect(() => {
     if (selectedUser) {
-      setLoadingMessages(true); // Show loading when switching users
+      setLoadingMessages(true);
       fetchMessages(selectedUser.id).then(() => setLoadingMessages(false));
       
       const interval = setInterval(() => fetchMessages(selectedUser.id), 5000);
@@ -57,27 +60,64 @@ export default function AdminSupport() {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim() || !selectedUser) return;
+    if ((!newMessage.trim() && !attachment) || !selectedUser) return;
 
     try {
-      const payload = {
-        sender: "ADMIN",
-        receiver: selectedUser.id,
-        message: newMessage
-      };
+      const formData = new FormData();
+      formData.append('sender', "ADMIN");
+      formData.append('receiver', selectedUser.id);
+      formData.append('message', newMessage);
+      if (attachment) {
+        formData.append('attachment', attachment);
+      }
       
-      const response = await axios.post(`${BASE_URL}/api/chat`, payload);
+      const response = await axios.post(`${BASE_URL}/api/chat`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      
       setMessages(prev => [...prev, response.data]);
       setNewMessage('');
+      setAttachment(null);
+      if (fileInputRef.current) fileInputRef.current.value = ''; // Reset file input
     } catch (error) {
       alert('Failed to send message');
     }
   };
 
-  // Helper to format date
+  const handleFileSelect = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setAttachment(e.target.files[0]);
+    }
+  };
+
   const formatTime = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const renderMessageContent = (message) => {
+    const imageRegex = /(\/uploads\/[a-zA-Z0-9_\-./]+\.(png|jpg|jpeg|webp|gif))/i;
+    const match = message.match(imageRegex);
+
+    if (match) {
+      const imagePath = match[0];
+      const textPart = message.replace(imagePath, '').trim();
+
+      return (
+        <div className="flex flex-col gap-2">
+          {textPart && <p className="whitespace-pre-wrap">{textPart}</p>}
+          <div className="rounded-lg overflow-hidden border border-gray-200 mt-1 cursor-pointer bg-black/5" onClick={() => setZoomedImage(`${BASE_URL}${imagePath}`)}>
+            <img 
+              src={`${BASE_URL}${imagePath}`} 
+              alt="Attachment" 
+              className="max-w-full h-auto max-h-64 object-contain"
+              onError={(e) => { e.target.style.display = 'none'; }} 
+            />
+          </div>
+        </div>
+      );
+    }
+    return <p className="whitespace-pre-wrap">{message}</p>;
   };
 
   return (
@@ -89,8 +129,9 @@ export default function AdminSupport() {
 
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 flex flex-1 overflow-hidden">
           
-          {/* LEFT SIDEBAR: User List */}
+          {/* LEFT SIDEBAR */}
           <div className={`w-full md:w-80 border-r border-gray-200 bg-gray-50 flex flex-col ${selectedUser ? 'hidden md:flex' : 'flex'}`}>
+            {/* ... (Same as before) ... */}
             <div className="p-4 border-b border-gray-200 bg-white">
               <h2 className="font-bold text-lg text-gray-800">Conversations</h2>
               <span className="text-xs text-gray-500">{users.length} active chats</span>
@@ -143,10 +184,7 @@ export default function AdminSupport() {
                 {/* Chat Header */}
                 <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-white shadow-sm z-10">
                   <div className="flex items-center gap-3">
-                    <button 
-                      onClick={() => setSelectedUser(null)}
-                      className="md:hidden p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-full"
-                    >
+                    <button onClick={() => setSelectedUser(null)} className="md:hidden p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-full">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                     </button>
                     <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center font-bold">
@@ -154,26 +192,20 @@ export default function AdminSupport() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900">{selectedUser.name}</h3>
-                      <p className="text-xs text-gray-500 flex items-center gap-1">
-                        <span className="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
-                        Online
-                      </p>
+                      <p className="text-xs text-gray-500 flex items-center gap-1">Online</p>
                     </div>
                   </div>
-                  {/* Optional: Add user details or actions here */}
                 </div>
 
                 {/* Messages Area */}
                 <div className="flex-1 overflow-y-auto p-6 bg-gray-50 space-y-4 custom-scrollbar relative">
-                   {/* Background pattern or color can go here */}
                    {loadingMessages && messages.length === 0 ? (
                       <div className="absolute inset-0 flex items-center justify-center bg-gray-50 z-10">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
                       </div>
                    ) : messages.length === 0 ? (
                       <div className="h-full flex flex-col items-center justify-center text-gray-400 opacity-60">
-                        <svg className="w-16 h-16 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                        <p>No messages yet. Say hello!</p>
+                        <p>No messages yet.</p>
                       </div>
                    ) : (
                       messages.map((msg, idx) => {
@@ -186,7 +218,7 @@ export default function AdminSupport() {
                                   ? 'bg-orange-500 text-white rounded-br-none' 
                                   : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none'
                               }`}>
-                                <p className="whitespace-pre-wrap">{msg.message}</p>
+                                {renderMessageContent(msg.message)}
                               </div>
                               <span className="text-[10px] text-gray-400 mt-1 px-1">
                                 {formatTime(msg.createdAt)}
@@ -201,19 +233,39 @@ export default function AdminSupport() {
 
                 {/* Input Area */}
                 <form onSubmit={handleSendMessage} className="p-4 bg-white border-t border-gray-200">
+                  {/* Attachment Preview */}
+                  {attachment && (
+                    <div className="mb-2 flex items-center gap-2 bg-gray-100 p-2 rounded-lg w-fit">
+                        <span className="text-xs font-bold text-gray-600 truncate max-w-[150px]">{attachment.name}</span>
+                        <button type="button" onClick={() => {setAttachment(null); fileInputRef.current.value = '';}} className="text-red-500 font-bold ml-2">&times;</button>
+                    </div>
+                  )}
+                  
                   <div className="flex gap-3 items-end bg-gray-50 p-2 rounded-2xl border border-gray-200 focus-within:border-orange-300 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
+                    {/* File Upload Button */}
+                    <label className="p-2 text-gray-400 hover:text-orange-500 cursor-pointer transition">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                        <input 
+                            type="file" 
+                            className="hidden" 
+                            accept="image/*"
+                            onChange={handleFileSelect}
+                            ref={fileInputRef}
+                        />
+                    </label>
+
                     <input
                       type="text"
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       placeholder="Type your reply..."
-                      className="flex-1 bg-transparent border-none focus:ring-0 p-2 text-gray-700 placeholder-gray-400"
+                      className="flex-1 bg-transparent border-none focus:ring-0 p-2 text-gray-700 placeholder-gray-400 outline-none"
                     />
                     <button 
                       type="submit" 
-                      disabled={!newMessage.trim()}
+                      disabled={!newMessage.trim() && !attachment}
                       className={`p-2 rounded-xl transition-all ${
-                        newMessage.trim() 
+                        newMessage.trim() || attachment
                           ? 'bg-orange-500 text-white hover:bg-orange-600 shadow-md hover:shadow-lg transform hover:-translate-y-0.5' 
                           : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                       }`}
@@ -235,9 +287,19 @@ export default function AdminSupport() {
               </div>
             )}
           </div>
-
         </div>
       </main>
+
+      {/* Image Zoom Modal */}
+      {zoomedImage && (
+        <div 
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 cursor-pointer"
+          onClick={() => setZoomedImage(null)}
+        >
+          <img src={zoomedImage} alt="Zoomed" className="max-w-full max-h-full rounded-lg shadow-2xl" />
+          <button className="absolute top-4 right-4 text-white text-4xl">&times;</button>
+        </div>
+      )}
     </div>
   );
 }

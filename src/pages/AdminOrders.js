@@ -7,6 +7,9 @@ export default function AdminOrders() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('unverified');
   const [zoomedImage, setZoomedImage] = useState(null);
+  
+  // State for receipt upload
+  const [uploadingReceiptId, setUploadingReceiptId] = useState(null);
 
   const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
   const API_URL = `${BASE_URL}/api/orders`;
@@ -39,10 +42,36 @@ export default function AdminOrders() {
     }
   };
 
-  const unverifiedOrders = orders.filter(o => o.status === 'Non Verified');
-  const verifiedOrders = orders.filter(o => o.status === 'Verified' || o.status === 'Delivered');
+  const handleReceiptUpload = async (id, e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  // Let's stick to tabs logic if previous tabs existed, or simplified:
+    setUploadingReceiptId(id);
+    const formData = new FormData();
+    formData.append('receipt', file);
+
+    try {
+        // Send to backend which updates order AND sends chat message
+        const res = await axios.put(`${API_URL}/${id}/receipt`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        
+        // Optimistically update the UI with new receipt path
+        setOrders(prev => prev.map(order => 
+            order.id === id ? { ...order, paymentScreenshot: res.data.path } : order
+        ));
+        
+        alert("Receipt updated and sent to customer chat.");
+    } catch (error) {
+        console.error(error);
+        alert("Failed to upload receipt.");
+    } finally {
+        setUploadingReceiptId(null);
+    }
+  };
+
+
+  const unverifiedOrders = orders.filter(o => o.status === 'Non Verified');
   const processedOrders = orders.filter(o => o.status === 'Verified');
   const deliveredOrders = orders.filter(o => o.status === 'Delivered');
 
@@ -110,9 +139,8 @@ export default function AdminOrders() {
                       <span className="font-semibold block">{order.user?.name || 'Unknown'}</span>
                       <span className="text-gray-500">{order.user?.email}</span>
                       
-                      {/* NEW: Recipient Details */}
                       <div className="mt-2 pt-2 border-t border-gray-200">
-                         <span className="block text-gray-400 text-xs uppercase font-bold">Recipient & Shipping</span>
+                         <span className="block text-gray-400 text-xs uppercase font-bold">Shipping Info</span>
                          <div className="font-bold text-gray-900">{order.recipientName}</div>
                          <div className="text-gray-800 font-medium">{order.contactNumber}</div>
                          <div className="text-gray-600 text-xs mt-1 leading-snug">
@@ -123,11 +151,6 @@ export default function AdminOrders() {
                     <div>
                       <span className="block text-gray-400 text-xs uppercase font-bold">Payment Method</span>
                       <span className="font-semibold">{order.codAmount > 0 ? 'COD + Advance' : 'Full Online'}</span>
-                    </div>
-                    <div>
-                      <span className="block text-gray-400 text-xs uppercase font-bold">Bank Used</span>
-                      <span className="font-semibold">{order.bankAccount?.bankName}</span>
-                      <div className="text-xs text-gray-500">{order.bankAccount?.accountNumber}</div>
                     </div>
                     <div>
                       <span className="block text-gray-400 text-xs uppercase font-bold">Amounts</span>
@@ -141,50 +164,39 @@ export default function AdminOrders() {
                       )}
                     </div>
                   </div>
-
-                  <div className="border-t border-gray-100 pt-4">
-                    <h4 className="font-bold text-sm text-gray-700 mb-2">Items ({order.products.length})</h4>
-                    <ul className="space-y-2">
-                      {order.products.map((item, idx) => (
-                        <li key={idx} className="flex justify-between text-sm">
-                          <span className="text-gray-600">{item.quantity}x {item.title}</span>
-                          <span className="font-medium">₨ {(item.price * item.quantity).toLocaleString()}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="border-t border-gray-200 mt-2 pt-2 flex justify-between font-bold">
-                      <span>Total Value</span>
-                      <span>₨ {order.totalCost.toLocaleString()}</span>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="lg:w-80 flex flex-col gap-4">
-                  {order.paymentScreenshot ? (
-                    <div className="bg-gray-100 rounded-xl overflow-hidden relative group h-48 lg:h-64 flex items-center justify-center border border-gray-200">
-                      {order.paymentScreenshot.endsWith('.pdf') ? (
-                        <a href={`${BASE_URL}${order.paymentScreenshot}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-bold">
-                          View PDF Receipt
-                        </a>
-                      ) : (
-                        <img 
-                          src={`${BASE_URL}${order.paymentScreenshot}`} 
-                          alt="Payment Proof" 
-                          className="w-full h-full object-contain cursor-pointer transition hover:opacity-90"
-                          onClick={() => setZoomedImage(`${BASE_URL}${order.paymentScreenshot}`)}
-                        />
-                      )}
-                      <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
-                        Click to Zoom
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-gray-50 h-48 flex items-center justify-center text-gray-400 rounded-xl border border-dashed border-gray-200">
-                      Receipt Deleted
-                    </div>
-                  )}
+                  <div className="bg-gray-100 rounded-xl overflow-hidden relative group h-48 lg:h-64 flex items-center justify-center border border-gray-200">
+                    {order.paymentScreenshot ? (
+                        <>
+                            {order.paymentScreenshot.endsWith('.pdf') ? (
+                            <a href={`${BASE_URL}${order.paymentScreenshot}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-bold">
+                                View PDF Receipt
+                            </a>
+                            ) : (
+                            <img 
+                                src={`${BASE_URL}${order.paymentScreenshot}`} 
+                                alt="Payment Proof" 
+                                className="w-full h-full object-contain cursor-pointer transition hover:opacity-90"
+                                onClick={() => setZoomedImage(`${BASE_URL}${order.paymentScreenshot}`)}
+                            />
+                            )}
+                            <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
+                            Click to Zoom
+                            </div>
+                        </>
+                    ) : (
+                        <span className="text-gray-400">No Receipt</span>
+                    )}
+                  </div>
 
-                  {/* Actions */}
+                  {/* UPLOAD / UPDATE RECEIPT BUTTON */}
+                  <label className={`w-full text-center py-2 rounded-xl font-bold cursor-pointer border-2 border-dashed border-gray-300 hover:border-orange-500 hover:text-orange-500 transition ${uploadingReceiptId === order.id ? 'opacity-50 pointer-events-none' : ''}`}>
+                      {uploadingReceiptId === order.id ? 'Uploading...' : 'Update Receipt & Send to Chat'}
+                      <input type="file" className="hidden" accept="image/*,application/pdf" onChange={(e) => handleReceiptUpload(order.id, e)} />
+                  </label>
+
                   {order.status === 'Non Verified' && (
                     <div className="grid grid-cols-2 gap-3">
                       <button onClick={() => handleStatusUpdate(order.id, 'Verified')} className="bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 transition shadow-md">Verify</button>

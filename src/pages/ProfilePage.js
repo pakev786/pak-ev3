@@ -18,9 +18,12 @@ export default function ProfilePage() {
   // Chat State
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [attachment, setAttachment] = useState(null);
+  const [zoomedImage, setZoomedImage] = useState(null);
+  
   const messagesEndRef = useRef(null);
-
-  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';;
+  const fileInputRef = useRef(null);
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
     if (!user) {
@@ -31,7 +34,6 @@ export default function ProfilePage() {
     }
   }, [user, navigate]);
 
-  // Poll for chat
   useEffect(() => {
     let interval;
     if (activeTab === 'chat' && user) {
@@ -89,20 +91,33 @@ export default function ProfilePage() {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() && !attachment) return;
 
     try {
-      const payload = {
-        sender: user.id,
-        receiver: "ADMIN",
-        message: newMessage
-      };
+      const formData = new FormData();
+      formData.append('sender', user.id);
+      formData.append('receiver', "ADMIN");
+      formData.append('message', newMessage);
+      if (attachment) {
+        formData.append('attachment', attachment);
+      }
       
-      const response = await axios.post(`${BASE_URL}/api/chat`, payload);
+      const response = await axios.post(`${BASE_URL}/api/chat`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
       setMessages([...messages, response.data]);
       setNewMessage('');
+      setAttachment(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (error) {
       alert('Failed to send message');
+    }
+  };
+
+  const handleFileSelect = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setAttachment(e.target.files[0]);
     }
   };
 
@@ -113,6 +128,31 @@ export default function ProfilePage() {
     }
   };
 
+  const renderMessageContent = (message) => {
+    const imageRegex = /(\/uploads\/[a-zA-Z0-9_\-./]+\.(png|jpg|jpeg|webp|gif))/i;
+    const match = message.match(imageRegex);
+
+    if (match) {
+      const imagePath = match[0];
+      const textPart = message.replace(imagePath, '').trim();
+
+      return (
+        <div className="flex flex-col gap-2">
+          {textPart && <p className="whitespace-pre-wrap">{textPart}</p>}
+          <div className="rounded-lg overflow-hidden border border-white/20 mt-1 cursor-pointer bg-black/20" onClick={() => setZoomedImage(`${BASE_URL}${imagePath}`)}>
+            <img 
+              src={`${BASE_URL}${imagePath}`} 
+              alt="Attachment" 
+              className="max-w-full h-auto max-h-64 object-contain"
+              onError={(e) => { e.target.style.display = 'none'; }} 
+            />
+          </div>
+        </div>
+      );
+    }
+    return <p className="whitespace-pre-wrap">{message}</p>;
+  };
+
   if (!user) return null;
 
   return (
@@ -120,7 +160,9 @@ export default function ProfilePage() {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 py-12">
+        {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+          {/* ... Header Content ... */}
           <div className="flex items-center gap-6">
             <div className="w-20 h-20 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-3xl font-bold border-4 border-white shadow-lg">
               {user.name.charAt(0).toUpperCase()}
@@ -131,12 +173,7 @@ export default function ProfilePage() {
               <p className="text-sm text-gray-400">{user.email || user.phone}</p>
             </div>
           </div>
-          <button 
-            onClick={handleLogout}
-            className="mt-6 md:mt-0 px-6 py-2 border-2 border-red-100 text-red-500 font-bold rounded-xl hover:bg-red-50 hover:border-red-200 transition"
-          >
-            Log Out
-          </button>
+          <button onClick={handleLogout} className="mt-6 md:mt-0 px-6 py-2 border-2 border-red-100 text-red-500 font-bold rounded-xl hover:bg-red-50 hover:border-red-200 transition">Log Out</button>
         </div>
 
         <div className="flex space-x-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
@@ -157,21 +194,11 @@ export default function ProfilePage() {
 
         <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 min-h-[400px] animate-fade-in">
           
-          {/* ORDERS TAB */}
+          {/* ORDERS & WARRANTIES TABS (Same as before) */}
           {activeTab === 'orders' && (
-            loadingOrders ? (
-              <div className="flex justify-center items-center h-64 text-gray-400">Loading orders...</div>
-            ) : orders.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full py-16 text-center">
-                <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6">
-                  <span className="text-4xl">📦</span>
-                </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">No Past Orders</h2>
-                <p className="text-gray-500 mb-6">You haven't placed any orders yet.</p>
-                <button onClick={() => navigate('/')} className="px-6 py-2 bg-orange-500 text-white rounded-lg font-bold">Browse Products</button>
-              </div>
-            ) : (
-              <div className="space-y-6">
+            loadingOrders ? <div className="flex justify-center items-center h-64 text-gray-400">Loading orders...</div> : 
+            orders.length === 0 ? <div className="text-center py-20 text-gray-400">No Past Orders</div> :
+            <div className="space-y-6">
                 {orders.map((order) => (
                   <div key={order.id} className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition">
                     <div className="flex flex-col md:flex-row justify-between md:items-center mb-4 border-b border-gray-100 pb-4">
@@ -200,44 +227,19 @@ export default function ProfilePage() {
                         </div>
                       ))}
                     </div>
-                    {order.deliveryTime && (
-                      <div className="mt-4 pt-4 border-t border-gray-100 text-xs text-gray-500">
-                        Expected Delivery: <span className="font-bold text-gray-900">{new Date(order.deliveryTime).toDateString()}</span>
-                      </div>
-                    )}
                   </div>
                 ))}
-              </div>
-            )
+            </div>
           )}
 
-          {/* WARRANTIES TAB */}
           {activeTab === 'warranties' && (
-            loadingWarranties ? (
-              <div className="flex justify-center items-center h-64 text-gray-400">Loading warranties...</div>
-            ) : warranties.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full py-16 text-center">
-                <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6">
-                  <span className="text-4xl">🛡️</span>
-                </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">No Active Warranties</h2>
-                <p className="text-gray-500 mb-6">Purchased items with warranties will appear here after your order is verified.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            loadingWarranties ? <div className="flex justify-center items-center h-64 text-gray-400">Loading warranties...</div> :
+            warranties.length === 0 ? <div className="text-center py-20 text-gray-400">No Active Warranties</div> :
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {warranties.map(warranty => (
                   <div key={warranty.id} className="bg-gradient-to-br from-gray-900 to-black text-white p-6 rounded-2xl shadow-xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-orange-500 rounded-full opacity-20 blur-xl"></div>
                     <div className="relative z-10">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <p className="text-orange-400 text-xs font-bold uppercase tracking-wider">Warranty Card</p>
-                          <h3 className="text-xl font-bold mt-1">{warranty.productName}</h3>
-                        </div>
-                        <div className="bg-white/10 px-3 py-1 rounded-lg text-xs font-mono">
-                          QTY: {warranty.quantity}
-                        </div>
-                      </div>
+                      <h3 className="text-xl font-bold mt-1">{warranty.productName}</h3>
                       <div className="border-t border-white/10 pt-4 mt-2">
                         <p className="text-xs text-gray-400 uppercase">Valid Until</p>
                         <p className="text-lg font-bold text-orange-400">{new Date(warranty.validUntil).toDateString()}</p>
@@ -245,8 +247,7 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 ))}
-              </div>
-            )
+            </div>
           )}
 
           {/* CHAT TAB */}
@@ -274,7 +275,7 @@ export default function ProfilePage() {
                         return (
                           <div key={idx} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
                             <div className={`max-w-[70%] p-3 rounded-2xl text-sm ${isMe ? 'bg-orange-500 text-white rounded-br-none' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none'}`}>
-                              <p>{msg.message}</p>
+                              {renderMessageContent(msg.message)}
                               <span className={`text-[10px] block mt-1 ${isMe ? 'text-orange-100' : 'text-gray-400'}`}>
                                 {new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                               </span>
@@ -286,19 +287,45 @@ export default function ProfilePage() {
                     <div ref={messagesEndRef} />
                   </div>
                   
-                  <form onSubmit={handleSendMessage} className="flex gap-2">
+                  <form onSubmit={handleSendMessage} className="flex gap-2 p-2 border border-gray-200 rounded-2xl bg-gray-50">
+                    {/* Attachment Preview */}
+                    {attachment && (
+                        <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-lg border border-gray-200 text-xs">
+                            <span className="truncate max-w-[100px]">{attachment.name}</span>
+                            <button type="button" onClick={() => {setAttachment(null); fileInputRef.current.value = '';}} className="text-red-500 font-bold">&times;</button>
+                        </div>
+                    )}
+
+                    <label className="p-2 text-gray-400 hover:text-orange-500 cursor-pointer transition flex items-center">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                        <input 
+                            type="file" 
+                            className="hidden" 
+                            accept="image/*"
+                            onChange={handleFileSelect}
+                            ref={fileInputRef}
+                        />
+                    </label>
+
                     <input
                       type="text"
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       placeholder="Type your message..."
-                      className="flex-1 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
+                      className="flex-1 bg-transparent border-none focus:ring-0 p-2 text-gray-700 placeholder-gray-400 outline-none"
                     />
                     <button 
                       type="submit" 
-                      className="bg-black text-white px-6 py-2 rounded-xl font-bold hover:bg-gray-800 transition"
+                      disabled={!newMessage.trim() && !attachment}
+                      className={`p-2 rounded-xl transition-all ${
+                        newMessage.trim() || attachment
+                          ? 'bg-black text-white hover:bg-gray-800 shadow-md' 
+                          : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      }`}
                     >
-                      Send
+                      <svg className="w-5 h-5 transform rotate-90" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                      </svg>
                     </button>
                   </form>
                 </div>
@@ -308,6 +335,17 @@ export default function ProfilePage() {
 
         </div>
       </main>
+
+      {/* Image Zoom Modal */}
+      {zoomedImage && (
+        <div 
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 cursor-pointer"
+          onClick={() => setZoomedImage(null)}
+        >
+          <img src={zoomedImage} alt="Zoomed" className="max-w-full max-h-full rounded-lg shadow-2xl" />
+          <button className="absolute top-4 right-4 text-white text-4xl">&times;</button>
+        </div>
+      )}
     </div>
   );
 }

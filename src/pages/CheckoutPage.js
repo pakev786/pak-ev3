@@ -134,6 +134,7 @@ export default function CheckoutPage() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // 1. Check File Type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
       if (!allowedTypes.includes(file.type)) {
         alert("Invalid file type. Only Images (JPEG, PNG, WEBP) and PDFs are allowed.");
@@ -141,6 +142,16 @@ export default function CheckoutPage() {
         setScreenshot(null);
         return;
       }
+
+      // 2. Check File Size (5MB Limit)
+      const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+      if (file.size > maxSize) {
+        alert("File is too large! Please upload a file smaller than 5MB.");
+        e.target.value = null;
+        setScreenshot(null);
+        return;
+      }
+
       setScreenshot(file);
     }
   };
@@ -189,7 +200,7 @@ export default function CheckoutPage() {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       
-      alert("Order submitted successfully! Please check your email.");
+      alert("Order submitted successfully! You will be notified via email once orrder is verified.");
       clearCart();
       navigate('/profile'); 
     } catch (error) {
@@ -346,7 +357,7 @@ export default function CheckoutPage() {
                   {screenshot ? screenshot.name : "Upload Payment Screenshot"}
                 </span>
                 <span className="text-xs text-gray-400 block mt-1">
-                    {screenshot ? 'Change File' : 'Supported: JPG, PNG, PDF'}
+                    {screenshot ? 'Change File' : 'Supported: JPG, PNG, PDF (Max 5MB)'}
                 </span>
               </label>
             </div>

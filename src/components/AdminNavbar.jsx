@@ -27,7 +27,8 @@ const AdminNavbar = ({ active }) => {
     { name: 'accounts', label: 'Accounts', path: '/adminAccounts', perm: 'accounts' },
     { name: 'support', label: 'Support', path: '/adminSupport', perm: 'support' },
     { name: 'vouchers', label: 'Vouchers', path: '/adminVouchers', perm: 'vouchers' },
-    { name: 'admins', label: 'Admins', path: '/adminManagement', perm: 'superadmin_only' } // Only for SuperAdmin
+    { name: 'admins', label: 'Admins', path: '/adminManagement', perm: 'superadmin_only' },
+    { name: 'evConfig', label: 'EV Config', path: '/adminEVConfig', perm: 'config' } 
   ];
 
   // Filter links based on role/permissions

@@ -28,6 +28,7 @@ import AdminVouchers from './pages/AdminVouchers';
 import AdminStats from './pages/AdminStats';
 import AdminManagement from './pages/AdminManagement';
 import AdminRoute from './components/AdminRoute';
+import AdminEVConfiguration from './pages/AdminEVConfiguration';
 
 export default function App() {
   const GOOGLE_CLIENT_ID = "386543108130-44n5t7m2j3pq0u4kjd0bcsd782eed7a1.apps.googleusercontent.com"; 
@@ -72,6 +73,10 @@ export default function App() {
               <AdminRoute requiredPermission="products"><AdminProducts /></AdminRoute>
             } />
             
+            <Route path="/adminEVConfig" element={
+              <AdminRoute requiredPermission="config"><AdminEVConfiguration /></AdminRoute>
+            } />
+
             <Route path="/adminOrders" element={
               <AdminRoute requiredPermission="orders"><AdminOrders /></AdminRoute>
             } />

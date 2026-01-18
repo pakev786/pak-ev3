@@ -3,9 +3,10 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
+// 1. Updated stats array with the link property
 const stats = [
   { label: 'EV Kits Delivered', value: '1.2K+' },
-  { label: 'Cities Covered', value: '20+' },
+  { label: 'Cities Covered', value: '20+', link: '/branches' }, 
   { label: 'Customer Satisfaction', value: '4.9/5' },
 ];
 
@@ -27,7 +28,7 @@ function HomePage() {
   const [banners, setBanners] = useState({});
   const [sections, setSections] = useState([]);
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]); // Needed for link resolution
+  const [categories, setCategories] = useState([]); 
   const [loading, setLoading] = useState(true);
 
   const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
@@ -224,19 +225,42 @@ function HomePage() {
       </section>
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Stats Section - Updated to grid-cols-3 for one line on mobile */}
+        
+        {/* 2. Stats Section - Updated to handle links conditionally */}
         <section className="grid grid-cols-3 gap-2 md:gap-4 mb-16">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-gray-100 p-3 md:p-6 flex flex-col items-center justify-center text-center"
-            >
-              <p className="text-xl md:text-3xl font-bold text-gray-900">{stat.value}</p>
-              <p className="mt-1 md:mt-2 text-[10px] md:text-xs uppercase tracking-widest text-gray-500 font-semibold leading-tight">
-                {stat.label}
-              </p>
-            </div>
-          ))}
+          {stats.map((stat) => {
+            // Define content to avoid repetition
+            const content = (
+                <>
+                <p className="text-xl md:text-3xl font-bold text-gray-900">{stat.value}</p>
+                <p className="mt-1 md:mt-2 text-[10px] md:text-xs uppercase tracking-widest text-gray-500 font-semibold leading-tight">
+                    {stat.label}
+                </p>
+                </>
+            );
+
+            // Conditional Rendering: Link vs Div
+            if (stat.link) {
+                return (
+                    <Link
+                    key={stat.label}
+                    to={stat.link}
+                    className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-gray-100 p-3 md:p-6 flex flex-col items-center justify-center text-center hover:shadow-md hover:border-orange-200 transition-all cursor-pointer"
+                    >
+                    {content}
+                    </Link>
+                );
+            }
+
+            return (
+                <div
+                    key={stat.label}
+                    className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-gray-100 p-3 md:p-6 flex flex-col items-center justify-center text-center"
+                >
+                    {content}
+                </div>
+            );
+          })}
         </section>
 
         {loading ? (

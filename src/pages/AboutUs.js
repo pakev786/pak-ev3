@@ -132,7 +132,7 @@ export default function AboutUs() {
               <p>
                 This website is built in collaboration with{' '}
                 <a 
-                  href="https://www.linkedin.com/company/vertex-soft-solutions/" 
+                  href="https://www.linkedin.com/in/vertex-soft-173a7b3a1/"
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-orange-500 hover:text-orange-400 font-bold transition"

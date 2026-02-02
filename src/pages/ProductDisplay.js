@@ -25,7 +25,6 @@ export default function ProductDisplay() {
   const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
-    // ... (Keep existing fetch logic) ...
     const fetchProductData = async () => {
       try {
         const prodRes = await axios.get(`${BASE_URL}/api/products`);
@@ -118,7 +117,7 @@ export default function ProductDisplay() {
         <nav className="text-sm text-gray-500 mb-8">
           <Link to="/" className="hover:text-orange-500 transition">Home</Link>
           <span className="mx-2">/</span>
-          <Link to="/categories" className="hover:text-orange-500 transition">Products</Link>
+          <Link to="/" className="hover:text-orange-500 transition">Products</Link>
           <span className="mx-2">/</span>
           <span className="text-gray-900 font-medium">{product.title}</span>
         </nav>

@@ -5,9 +5,9 @@ import Navbar from '../components/Navbar';
 
 // 1. Updated stats array with the link property
 const stats = [
-  { label: 'EV Kits Delivered', value: '1.2K+' },
+  { label: 'EV Kits Delivered', value: '12K+' },
   { label: 'Cities Covered', value: '20+', link: '/branches' }, 
-  { label: 'Customer Satisfaction', value: '4.9/5' },
+  { label: 'Customer Satisfaction', value: '99.8/100' },
 ];
 
 const marqueeStyles = `

@@ -31,10 +31,28 @@ export default function AboutUs() {
 
           <div className="p-8 md:p-12 space-y-12">
             
-            {/* Origin Story */}
+            <section>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <span className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">01</span>
+                Our Locations
+              </h2>
+              <Link to="/branches" className="block group relative overflow-hidden rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300">
+                <img 
+                  src="/branches.jpeg" 
+                  alt="Pak EV Branches" 
+                  className="w-full h-auto object-cover transform group-hover:scale-105 transition duration-500"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center transition duration-300">
+                  <span className="bg-white text-gray-900 px-6 py-2 rounded-full font-bold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition duration-300 shadow-lg">
+                    View All Branches
+                  </span>
+                </div>
+              </Link>
+            </section>
+            
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                <span className="w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm">01</span>
+                <span className="w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm">02</span>
                 Our Roots
               </h2>
               <p className="text-gray-600 leading-relaxed text-lg">
@@ -43,11 +61,10 @@ export default function AboutUs() {
                 From humble beginnings, we have expanded our footprint to more than <strong className="text-gray-900">20 cities</strong> across the nation, serving thousands of satisfied customers.
               </p>
             </section>
-
-            {/* What We Do */}
+            
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm">02</span>
+                <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm">03</span>
                 What We Do
               </h2>
               <p className="text-gray-600 leading-relaxed text-lg mb-6">
@@ -77,10 +94,9 @@ export default function AboutUs() {
               </div>
             </section>
 
-            {/* Social Links */}
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <span className="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm">03</span>
+                <span className="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm">04</span>
                 Connect With Us
               </h2>
               <div className="flex flex-wrap gap-4">
@@ -99,26 +115,6 @@ export default function AboutUs() {
                   </a>
                 ))}
               </div>
-            </section>
-
-            {/* Our Branches (New Section) */}
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <span className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">04</span>
-                Our Locations
-              </h2>
-              <Link to="/branches" className="block group relative overflow-hidden rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300">
-                <img 
-                  src="/branches.jpg" 
-                  alt="Pak EV Branches" 
-                  className="w-full h-auto object-cover transform group-hover:scale-105 transition duration-500"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center transition duration-300">
-                  <span className="bg-white text-gray-900 px-6 py-2 rounded-full font-bold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition duration-300 shadow-lg">
-                    View All Branches
-                  </span>
-                </div>
-              </Link>
             </section>
 
           </div>

@@ -58,7 +58,7 @@ export default function SearchPage() {
                 We couldn't find any products matching <strong>"{query}"</strong>. 
                 <br/>Try searching for something else or browse categories.
             </p>
-            <Link to="/categories" className="px-6 py-3 bg-black text-white rounded-lg font-semibold hover:bg-orange-600 transition">
+            <Link to="/" className="px-6 py-3 bg-black text-white rounded-lg font-semibold hover:bg-orange-600 transition">
               Browse Categories
             </Link>
           </div>

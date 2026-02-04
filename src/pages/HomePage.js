@@ -310,7 +310,7 @@ function HomePage() {
                   <span className="text-2xl font-black tracking-tighter text-gray-900 uppercase">PAK EV</span>
                 </div>
                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
-                  We are a proud Pakistani brand with over 7 years of experience in the power sector, dedicated to converting fuel vehicles to electric and providing high-quality EV components nationwide at the most competitive rates. Under the leadership of our<b> CEO, Haroon Umar</b> whose innovative ideas drive our vision, we are committed to shaping a sustainable electric future.
+                  We are a proud Pakistani brand with over 7 years of experience in the power sector, dedicated to converting fuel vehicles to electric and providing high-quality EV components nationwide at the most competitive rates. Under the leadership of our<b> CEO, Muhammad Haroon</b> whose innovative ideas drive our vision, we are committed to shaping a sustainable electric future.
                 </p>
                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
                   Address: Back of ZTBL head rajkan, yazman, bahawalpur</p>

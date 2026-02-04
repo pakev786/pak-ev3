@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
-// 1. Updated stats array with the link property
 const stats = [
   { label: 'EV Kits Delivered', value: '12K+' },
   { label: 'Cities Covered', value: '20+', link: '/branches' }, 
@@ -40,7 +39,8 @@ const marqueeStyles = `
   }
   .animate-marquee {
     display: flex;
-    animation: marquee 25s linear infinite;
+    /* Default fallback speed, now handled dynamically in component */
+    animation: marquee 30s linear infinite; 
   }
   .marquee-container:hover .animate-marquee {
     animation-play-state: paused;
@@ -76,7 +76,7 @@ function HomePage() {
       }
     };
     fetchData();
-  }, []);
+  }, [BASE_URL]);
 
   const getBannerUrl = (slot) => {
     if (banners[slot] && banners[slot].image) {
@@ -88,21 +88,15 @@ function HomePage() {
   const getBannerLink = (slot) => {
     const banner = banners[slot];
     if (!banner || banner.linkType === 'none' || !banner.linkValue) return '#';
-
-    if (banner.linkType === 'static') {
-        return banner.linkValue;
-    }
-    
+    if (banner.linkType === 'static') return banner.linkValue;
     if (banner.linkType === 'category') {
         const cat = categories.find(c => c.id === banner.linkValue);
         return cat ? `/category/${cat.name.toLowerCase().replace(/\s+/g, '-')}` : '#';
     }
-
     if (banner.linkType === 'section') {
         const sec = sections.find(s => s.id === banner.linkValue);
         return sec ? `/section/${sec.name.toLowerCase().replace(/\s+/g, '-')}` : '#';
     }
-
     return '#';
   };
 
@@ -131,7 +125,6 @@ function HomePage() {
     );
   };
 
-  // --- Product Card Component ---
   const ProductCard = ({ product }) => (
     <Link to={`/product/${product.id}`} className="flex-none w-64 md:w-72 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group overflow-hidden cursor-pointer">
       <div className="h-48 relative bg-gray-50 rounded-t-xl overflow-hidden p-4 flex items-center justify-center">
@@ -176,6 +169,10 @@ function HomePage() {
 
     if (sectionProducts.length === 0) return null;
 
+    // --- SOLUTION 2: Calculate dynamic duration based on product count ---
+    // 8-10 seconds per card is usually a good "readable" speed
+    const marqueeDuration = sectionProducts.length * 8; 
+
     const scroll = (direction) => {
       if (scrollRef.current) {
         const { current } = scrollRef;
@@ -199,7 +196,11 @@ function HomePage() {
 
         {section.isMarquee ? (
           <div className="relative overflow-hidden marquee-container">
-            <div className="flex gap-6 animate-marquee w-max">
+            <div 
+              className="flex gap-6 animate-marquee w-max"
+              style={{ animationDuration: `${marqueeDuration}s` }} // Applied Dynamic Speed
+            >
+              {/* Double items for seamless loop */}
               {[...sectionProducts, ...sectionProducts].map((product, idx) => (
                 <ProductCard key={`${product.id}-${idx}`} product={product} />
               ))}
@@ -248,11 +249,8 @@ function HomePage() {
       </section>
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        
-        {/* 2. Stats Section - Updated to handle links conditionally */}
         <section className="grid grid-cols-3 gap-2 md:gap-4 mb-16">
           {stats.map((stat) => {
-            // Define content to avoid repetition
             const content = (
                 <>
                 <p className="text-xl md:text-3xl font-bold text-gray-900">{stat.value}</p>
@@ -262,7 +260,6 @@ function HomePage() {
                 </>
             );
 
-            // Conditional Rendering: Link vs Div
             if (stat.link) {
                 return (
                     <Link
@@ -287,21 +284,16 @@ function HomePage() {
         </section>
 
         {loading ? (
-           <div className="space-y-8">{[1, 2].map(i => <div key={i} className="h-64 bg-gray-100 rounded-xl animate-pulse" />)}</div>
+            <div className="space-y-8">{[1, 2].map(i => <div key={i} className="h-64 bg-gray-100 rounded-xl animate-pulse" />)}</div>
         ) : sections.length > 0 ? (
            sections.map(section => <ProductSection key={section.id} section={section} />)
         ) : (
           <div className="text-center py-20 text-gray-400"><p>No sections configured.</p></div>
         )}
 
-
-
-
         <footer className="mt-20 border-t border-gray-100 bg-white pt-20 pb-10 px-6">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-
-              {/* Column 1: Identity */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-orange-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-orange-200">
@@ -310,13 +302,12 @@ function HomePage() {
                   <span className="text-2xl font-black tracking-tighter text-gray-900 uppercase">PAK EV</span>
                 </div>
                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
-                  We are a proud Pakistani brand with over 7 years of experience in the power sector, dedicated to converting fuel vehicles to electric and providing high-quality EV components nationwide at the most competitive rates. Under the leadership of our<b> CEO, Muhammad Haroon</b> whose innovative ideas drive our vision, we are committed to shaping a sustainable electric future.
+                  We are a proud Pakistani brand with over 7 years of experience in the power sector, dedicated to converting fuel vehicles to electric and providing high-quality EV components nationwide at the most competitive rates. Under the leadership of our<b> CEO, Muhammad Haroon</b>.
                 </p>
                 <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
                   Address: Back of ZTBL head rajkan, yazman, bahawalpur</p>
               </div>
 
-              {/* Column 2: Navigation */}
               <div>
                 <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-8">Quick Links</h4>
                 <ul className="space-y-4">
@@ -339,12 +330,8 @@ function HomePage() {
                 </ul>
               </div>
 
-              {/* Column 3: Social Connectivity */}
-              {/* Column 3: Contact Us */}
               <div>
                 <h4 className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-8">Connect With Us</h4>
-
-                {/* New Contact Rows */}
                 <div className="space-y-4 mb-8">
                   {contactInfo.map((item) => (
                     <div key={item.name} className="flex items-center gap-4 group cursor-pointer">
@@ -354,18 +341,13 @@ function HomePage() {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-[10px] text-gray-400 uppercase font-bold tracking-tighter leading-none mb-1">
-                          {item.name}
-                        </p>
-                        <p className="text-sm text-gray-700 font-semibold group-hover:text-orange-600 transition-colors">
-                          {item.value}
-                        </p>
+                        <p className="text-[10px] text-gray-400 uppercase font-bold tracking-tighter leading-none mb-1">{item.name}</p>
+                        <p className="text-sm text-gray-700 font-semibold group-hover:text-orange-600 transition-colors">{item.value}</p>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                {/* Social Icons Grid */}
                 <div className="flex flex-wrap gap-3">
                   {socialLinks.map((social) => (
                     <a
@@ -373,7 +355,7 @@ function HomePage() {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`w-11 h-11 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 transition-all duration-300 hover:text-white hover:scale-110 hover:shadow-lg ${social.hover}`}
+                      className={`w-11 h-11 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 transition-all duration-300 hover:text-white hover:scale-110 hover:shadow-lg ${social.color}`}
                       title={social.name}
                     >
                       <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -383,7 +365,6 @@ function HomePage() {
                   ))}
                 </div>
 
-                {/* Existing Support Hours Section */}
                 <div className="mt-10 p-4 rounded-2xl bg-gray-50 border border-gray-100">
                   <p className="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">Support Hours</p>
                   <p className="text-xs text-gray-600 font-medium">Sat - Thur: 9:00 AM - 6:00 PM</p>
@@ -391,19 +372,12 @@ function HomePage() {
               </div>
             </div>
 
-            {/* Bottom Bar */}
             <div className="mt-20 pt-8 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-xs text-gray-400 font-medium italic">
-                Made with Pride in Pakistan 🇵🇰
-              </p>
-              <p className="text-xs text-gray-400">
-                © {new Date().getFullYear()} PAK EV. All rights reserved.
-              </p>
+              <p className="text-xs text-gray-400 font-medium italic">Made with Pride in Pakistan 🇵🇰</p>
+              <p className="text-xs text-gray-400">© {new Date().getFullYear()} PAK EV. All rights reserved.</p>
             </div>
           </div>
         </footer>
-
-
       </main>
     </div>
   );

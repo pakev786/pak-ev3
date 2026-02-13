@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const APPLIANCE_WATTAGES = {
   select: 0,
@@ -204,6 +206,23 @@ export default function LoadCalculator() {
   const [totalKwh, setTotalKwh] = useState(0);
   const [batteryVoltage, setBatteryVoltage] = useState(null);
   const [batteryResult, setBatteryResult] = useState('Please select battery voltage');
+  const [loadProducts, setLoadProducts] = useState([]);
+
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+  const scrollRef = useRef(null); 
+
+  useEffect(() => {
+    const fetchLoadProducts = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/ev/load-featured-products`);
+        setLoadProducts(res.data);
+      } catch (err) {
+        console.error("Error fetching load featured products:", err);
+      }
+    };
+    fetchLoadProducts();
+  }, []);
 
   const updateBatterySuggestion = () => {
     if (!batteryVoltage) {
@@ -227,6 +246,55 @@ export default function LoadCalculator() {
     setTotalWatts(watts);
     setTotalKwh(kwh);
   };
+
+  const getId = (item) => item?.id || item?._id;
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const { current } = scrollRef;
+      const scrollAmount = 300; 
+      current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  const ProductCard = ({ product }) => (
+    <Link to={`/product/${getId(product)}`} className="flex-none w-64 md:w-72 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group overflow-hidden cursor-pointer">
+      <div className="h-48 relative bg-gray-50 rounded-t-xl overflow-hidden p-4 flex items-center justify-center">
+        <img 
+          src={product.image.startsWith('http') ? product.image : `${BASE_URL}${product.image}`} 
+          alt={product.title} 
+          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+          onError={(e) => { e.target.src = 'https://via.placeholder.com/300?text=No+Image'; }}
+        />
+        <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
+            {product.optionalPrice > 0 && (
+            <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">Sale</span>
+            )}
+            {/* FIX: Check codAvailable explicitly */}
+            {product.codAvailable ? (
+                <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-green-200">COD</span>
+            ) : (
+                <span className="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-blue-200">No COD</span>
+            )}
+        </div>
+      </div>
+      <div className="p-4 flex flex-col flex-1">
+        <div className="text-xs text-gray-400 font-bold uppercase mb-1">{product.category?.name || 'EV Part'}</div>
+        <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 text-sm md:text-base group-hover:text-orange-600 transition-colors" title={product.title}>{product.title}</h3>
+        <div className="mt-auto pt-3 border-t border-gray-50 flex items-center justify-between">
+          <div>
+            <span className="block text-lg font-bold text-gray-900">₨ {product.price?.toLocaleString()}</span>
+            {product.optionalPrice > 0 && (
+               <span className="block text-xs text-gray-400 line-through">₨ {product.optionalPrice.toLocaleString()}</span>
+            )}
+          </div>
+          <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center hover:bg-orange-600 transition">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
@@ -390,8 +458,43 @@ export default function LoadCalculator() {
             </div>
           </div>
         </div>
+
+        {batteryVoltage && loadProducts.length > 0 && (
+          <div className="mt-20">
+            <div className="flex items-center justify-between mb-8 px-1">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Complete Your Setup</h2>
+                <p className="text-gray-500 text-sm mt-1">Recommended products for your load requirements</p>
+              </div>
+              <div className="flex space-x-2">
+                <button onClick={() => scroll('left')} className="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-200 flex items-center justify-center hover:bg-orange-50 hover:border-orange-200 text-gray-600 hover:text-orange-600 transition">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <button onClick={() => scroll('right')} className="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-200 flex items-center justify-center hover:bg-orange-50 hover:border-orange-200 text-gray-600 hover:text-orange-600 transition">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                </button>
+              </div>
+            </div>
+
+            <div className="relative group">
+              <div 
+                ref={scrollRef} 
+                className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x px-1" 
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {loadProducts
+                  .filter(product => product.isAvailable) // Filter for available products
+                  .map((product) => (
+                    <div key={product._id} className="min-w-[280px] snap-start">
+                      <ProductCard product={product} />
+                    </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
     </div>
   );
 }
-

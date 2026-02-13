@@ -11,7 +11,7 @@ export default function AdminManagement() {
   // SuperAdmin Password Change
   const [superPassword, setSuperPassword] = useState('');
 
-  const AVAILABLE_PERMISSIONS = ['stats', 'categories', 'products', 'orders', 'accounts', 'support', 'vouchers','config'];
+  const AVAILABLE_PERMISSIONS = ['stats', 'categories', 'products', 'orders', 'accounts', 'support', 'vouchers','config',"showProducts"];
   const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';;
 
   useEffect(() => {

@@ -12,6 +12,11 @@ export default function AdminEVProducts() {
 
   const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
+  const getImageUrl = (path) => {
+    if (!path) return 'https://via.placeholder.com/300?text=No+Image';
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    return `${BASE_URL}${cleanPath}`;
+  };
   useEffect(() => {
     fetchData();
   }, []);
@@ -175,11 +180,11 @@ export default function AdminEVProducts() {
                     </div>
 
                     <img 
-                      src={product.image} 
-                      alt={product.title} 
-                      className="w-full h-40 object-cover"
-                    />
-                    
+  src={getImageUrl(product.image)} 
+  alt={product.title} 
+  className="w-full h-40 object-cover"
+  onError={(e) => { e.target.src = 'https://via.placeholder.com/300?text=Error+Loading'; }}
+/>
                     <div className="p-4">
                       <h3 className="font-semibold text-gray-800 line-clamp-1" title={product.title}>{product.title}</h3>
                       <div className="flex justify-between items-center mt-2">

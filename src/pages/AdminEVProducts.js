@@ -226,12 +226,12 @@ export default function AdminEVProducts() {
                         className="h-5 w-5 text-orange-600 rounded focus:ring-orange-500"
                       />
                     </div>
-
-                    <img 
-                      src={product.image} 
-                      alt={product.title} 
-                      className="w-full h-40 object-cover"
-                    />
+<img
+                    src={getImageUrl(product.image)} 
+  alt={product.title} 
+  className="w-full h-40 object-cover"
+  onError={(e) => { e.target.src = 'https://via.placeholder.com/300?text=Error+Loading'; }}
+/>
                     
                     <div className="p-4">
                       <h3 className="font-semibold text-gray-800 line-clamp-1" title={product.title}>{product.title}</h3>

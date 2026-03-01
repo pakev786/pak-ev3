@@ -20,9 +20,8 @@ export default function AdminHome() {
   // --- Data for Selects ---
   const [categories, setCategories] = useState([]);
   const [sections, setSections] = useState([]);
-  const [sectionsList, setSectionsList] = useState([]); // Separate list for dragging
+  const [sectionsList, setSectionsList] = useState([]); 
   
-  // --- Section Logic Vars ---
   const [secInputValue, setSecInputValue] = useState('');
   const [secIsMarquee, setSecIsMarquee] = useState(false);
   const [isSecInputVisible, setIsSecInputVisible] = useState(false);
@@ -30,10 +29,10 @@ export default function AdminHome() {
   const [draggedSectionIndex, setDraggedSectionIndex] = useState(null);
   const secInputRef = useRef(null);
 
-  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';;
-  const BANNERS_API_URL = `${BASE_URL}/api/banners`;
-  const SEC_API_URL = `${BASE_URL}/api/sections`;
-  const CAT_API_URL = `${BASE_URL}/api/categories`;
+  const BANNERS_API_URL = 'http://localhost:5000/api/banners';
+  const SEC_API_URL = 'http://localhost:5000/api/sections';
+  const CAT_API_URL = 'http://localhost:5000/api/categories';
+  const BASE_URL = 'http://localhost:5000';
 
   const STATIC_ROUTES = [
     { label: 'EV Calculator', value: '/ev-calculator' },
@@ -65,7 +64,6 @@ export default function AdminHome() {
       ]);
       setBanners(bannersRes.data);
       setSectionsList(sectionsRes.data);
-      // For dropdowns
       setCategories(catsRes.data);
       setSections(sectionsRes.data);
     } catch (error) {
@@ -75,20 +73,16 @@ export default function AdminHome() {
     }
   };
 
-  // --- BANNER MODAL LOGIC ---
-
   const openBannerModal = (slot, label) => {
     const currentBanner = banners[slot];
     setEditingSlot({ slot, label });
     
-    // Init form data
     setModalFormData({
-      imageFile: null, // Reset file input
+      imageFile: null,
       linkType: currentBanner?.linkType || 'none',
       linkValue: currentBanner?.linkValue || ''
     });
     
-    // Init preview
     if (currentBanner?.image) {
       setModalPreview(`${BASE_URL}${currentBanner.image}`);
     } else {
@@ -119,8 +113,6 @@ export default function AdminHome() {
     e.preventDefault();
     if (!editingSlot) return;
     
-    // If no existing image and no new file, error out (unless backend allows purely link update on existing)
-    // For simplicity, if we have no preview, we assume no image.
     if (!modalPreview) {
         alert("Please upload an image for the banner.");
         return;
@@ -176,7 +168,6 @@ export default function AdminHome() {
           </div>
         )}
         
-        {/* Overlay on hover */}
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
             <span className="bg-white text-black px-4 py-2 rounded-full font-bold shadow-lg">Edit</span>
         </div>
@@ -188,7 +179,7 @@ export default function AdminHome() {
     );
   };
 
-  // --- SECTIONS LOGIC (CRUD + DnD) ---
+  // --- SECTIONS LOGIC ---
   const openSecInput = (e) => {
     e.stopPropagation();
     setEditingSecId(null);
@@ -309,14 +300,13 @@ export default function AdminHome() {
         {/* --- BANNER EDIT MODAL --- */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-fade-in-down">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
               <div className="p-6 border-b border-gray-100 flex justify-between items-center">
                 <h3 className="text-xl font-bold">Edit {editingSlot?.label}</h3>
                 <button onClick={closeBannerModal} className="text-gray-400 hover:text-red-500 text-2xl">&times;</button>
               </div>
               
               <form onSubmit={handleSaveBanner} className="p-6 space-y-6">
-                {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Banner Image</label>
                   <div className="relative h-48 bg-gray-100 rounded-xl overflow-hidden border-2 border-dashed border-gray-300 group">
@@ -332,7 +322,6 @@ export default function AdminHome() {
                   </div>
                 </div>
 
-                {/* Link Type Selector */}
                 <div>
                     <label className="block text-sm font-bold text-gray-700 mb-2">Link To</label>
                     <select 
@@ -344,13 +333,15 @@ export default function AdminHome() {
                         <option value="static">Static Page (e.g., Calculators)</option>
                         <option value="category">Category</option>
                         <option value="section">Section</option>
+                        <option value="external">External Link (URL)</option>
                     </select>
                 </div>
 
-                {/* Link Value Selector */}
                 {modalFormData.linkType !== 'none' && (
                     <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2">Select Target</label>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">
+                           {modalFormData.linkType === 'external' ? 'Enter Full URL' : 'Select Target'}
+                        </label>
                         
                         {modalFormData.linkType === 'static' && (
                             <select 
@@ -384,6 +375,16 @@ export default function AdminHome() {
                                 {sections.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                             </select>
                         )}
+
+                        {modalFormData.linkType === 'external' && (
+                            <input 
+                                type="url"
+                                placeholder="https://example.com"
+                                className="w-full p-3 border border-gray-300 rounded-xl outline-none focus:border-orange-500"
+                                value={modalFormData.linkValue}
+                                onChange={(e) => setModalFormData({...modalFormData, linkValue: e.target.value})}
+                            />
+                        )}
                     </div>
                 )}
 
@@ -411,7 +412,7 @@ export default function AdminHome() {
           </div>
 
           {isSecInputVisible && (
-            <div ref={secInputRef} className="mb-6 bg-white p-6 rounded-2xl shadow-xl border-l-4 border-black animate-fade-in-down">
+            <div ref={secInputRef} className="mb-6 bg-white p-6 rounded-2xl shadow-xl border-l-4 border-black">
               <h3 className="font-bold mb-3">{editingSecId ? 'Edit Section' : 'New Section'}</h3>
               <form onSubmit={handleSecSubmit} className="flex gap-4 items-center">
                 <input 
@@ -445,7 +446,7 @@ export default function AdminHome() {
                     className={`p-4 flex items-center justify-between group transition-colors cursor-move ${draggedSectionIndex === index ? 'bg-orange-50 opacity-50' : 'hover:bg-gray-50'}`}
                   >
                     <div className="flex items-center gap-4">
-                      <div className="text-gray-300 group-hover:text-gray-500 cursor-grab active:cursor-grabbing">
+                      <div className="text-gray-300 group-hover:text-gray-500">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" /></svg>
                       </div>
                       <div>

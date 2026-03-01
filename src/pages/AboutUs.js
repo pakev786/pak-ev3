@@ -56,7 +56,7 @@ export default function AboutUs() {
                 Our Roots
               </h2>
               <p className="text-gray-600 leading-relaxed text-lg">
-                Pak EV is a proud Pakistani startup co-founded by <strong className="text-gray-900">Haroon Umar</strong>. 
+                Pak EV is a proud Pakistani startup founded by <strong className="text-gray-900">Muhammad Haroon</strong>. 
                 Our journey began in <span className="text-gray-900 font-medium">Head Rajkan (Bahawalpur)</span> with a vision to revolutionize transportation in Pakistan. 
                 From humble beginnings, we have expanded our footprint to more than <strong className="text-gray-900">20 cities</strong> across the nation, serving thousands of satisfied customers.
               </p>

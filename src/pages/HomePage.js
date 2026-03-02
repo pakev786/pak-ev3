@@ -77,7 +77,7 @@ function HomePage() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const BASE_URL = 'http://localhost:5000';
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
     const fetchData = async () => {

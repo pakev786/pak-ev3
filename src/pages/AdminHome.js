@@ -28,11 +28,12 @@ export default function AdminHome() {
   const [editingSecId, setEditingSecId] = useState(null);
   const [draggedSectionIndex, setDraggedSectionIndex] = useState(null);
   const secInputRef = useRef(null);
+  
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const BANNERS_API_URL = `${BASE_URL}/api/banners`;
+  const SEC_API_URL = `${BASE_URL}/api/sections`;
+  const CAT_API_URL = `${BASE_URL}/api/categories`;
 
-  const BANNERS_API_URL = 'http://localhost:5000/api/banners';
-  const SEC_API_URL = 'http://localhost:5000/api/sections';
-  const CAT_API_URL = 'http://localhost:5000/api/categories';
-  const BASE_URL = 'http://localhost:5000';
 
   const STATIC_ROUTES = [
     { label: 'EV Calculator', value: '/ev-calculator' },

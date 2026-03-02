@@ -49,7 +49,6 @@ const socialLinks = [
   }
 ];
 
-
 const stats = [
   { label: 'EV Kits Delivered', value: '1.2K+' },
   { label: 'Cities Covered', value: '20+' },
@@ -63,7 +62,7 @@ const marqueeStyles = `
   }
   .animate-marquee {
     display: flex;
-    animation: marquee 25s linear infinite;
+    animation: marquee var(--marquee-duration, 25s) linear infinite;
   }
   .marquee-container:hover .animate-marquee {
     animation-play-state: paused;
@@ -99,7 +98,7 @@ function HomePage() {
       }
     };
     fetchData();
-  }, []);
+  }, [BASE_URL]);
 
   const getBannerUrl = (slot) => {
     if (banners[slot] && banners[slot].image) {
@@ -111,10 +110,7 @@ function HomePage() {
   const getBannerLink = (slot) => {
     const banner = banners[slot];
     if (!banner || banner.linkType === 'none' || !banner.linkValue) return '#';
-
     if (banner.linkType === 'static') return banner.linkValue;
-    
-    // NEW: Handle external URLs directly
     if (banner.linkType === 'external') return banner.linkValue;
 
     if (banner.linkType === 'category') {
@@ -154,29 +150,14 @@ function HomePage() {
       </>
     );
 
-    // If external, use standard <a> tag
     if (isExternal && isLink) {
       return (
-        <a 
-          href={linkTo} 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className={sharedClasses}
-        >
-          {bannerContent}
-        </a>
+        <a href={linkTo} target="_blank" rel="noopener noreferrer" className={sharedClasses}>{bannerContent}</a>
       );
     }
 
-    // Default internal link
     return (
-      <Link
-        to={linkTo}
-        className={sharedClasses}
-        onClick={e => !isLink && e.preventDefault()}
-      >
-        {bannerContent}
-      </Link>
+      <Link to={linkTo} className={sharedClasses} onClick={e => !isLink && e.preventDefault()}>{bannerContent}</Link>
     );
   };
 
@@ -222,6 +203,9 @@ function HomePage() {
 
     if (sectionProducts.length === 0) return null;
 
+    // Calculation: Total products * 4 seconds per product (Readable speed)
+    const marqueeDuration = `${Math.max(sectionProducts.length * 4, 15)}s`;
+
     const scroll = (direction) => {
       if (scrollRef.current) {
         scrollRef.current.scrollBy({ left: direction === 'left' ? -300 : 300, behavior: 'smooth' });
@@ -240,7 +224,10 @@ function HomePage() {
 
         {section.isMarquee ? (
           <div className="relative overflow-hidden marquee-container">
-            <div className="flex gap-6 animate-marquee w-max">
+            <div 
+              className="flex gap-6 animate-marquee w-max"
+              style={{ '--marquee-duration': marqueeDuration }}
+            >
               {[...sectionProducts, ...sectionProducts].map((product, idx) => (
                 <ProductCard key={`${product.id}-${idx}`} product={product} />
               ))}

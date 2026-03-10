@@ -117,6 +117,12 @@ const branches = [
     address: ""
   },
   {
+    city: "Jehlum",
+    holder: "Rameez Yusuf",
+    phone: "3337827124",
+    address: "Jehlum"
+  },
+  {
     city: "Nowshera",
     holder: "Mr. Waqas Ali",
     phone: "3312416728",

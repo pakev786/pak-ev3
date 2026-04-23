@@ -27,6 +27,7 @@ const AdminNavbar = ({ active }) => {
     { name: 'accounts', label: 'Accounts', path: '/adminAccounts', perm: 'accounts' },
     { name: 'support', label: 'Support', path: '/adminSupport', perm: 'support' },
     { name: 'vouchers', label: 'Vouchers', path: '/adminVouchers', perm: 'vouchers' },
+    { name: 'branches', label: 'Branches', path: '/adminBranches', perm: 'branches' }, // <--- NEW LINK ADDED
     { name: 'admins', label: 'Admins', path: '/adminManagement', perm: 'superadmin_only' },
     { name: 'evConfig', label: 'EV Config', path: '/adminEVConfig', perm: 'config' },
     { name: 'showProducts', label: 'Show Products', path: '/showProducts', perm: 'showProducts' } 

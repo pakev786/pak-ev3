@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import axios from 'axios';
 import HomePage from './pages/HomePage';
 import EVCalculator from './pages/EVCalculator';
 import LoadCalculator from './pages/LoadCalculator';
@@ -31,6 +32,33 @@ import AdminRoute from './components/AdminRoute';
 import AdminEVConfiguration from './pages/AdminEVConfiguration';
 import AdminEVProducts from './pages/AdminEVProducts';
 import AdminBranches from './pages/AdminBranches';
+
+// Configure axios interceptor for Authorization headers
+axios.interceptors.request.use(
+  (config) => {
+    // Check for admin user
+    const adminStr = localStorage.getItem('adminUser');
+    if (adminStr) {
+      const admin = JSON.parse(adminStr);
+      if (admin.token) {
+        config.headers.Authorization = `Bearer ${admin.token}`;
+      }
+    } else {
+      // Check for regular user
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        if (user.token) {
+          config.headers.Authorization = `Bearer ${user.token}`;
+        }
+      }
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default function App() {
   const GOOGLE_CLIENT_ID = "386543108130-44n5t7m2j3pq0u4kjd0bcsd782eed7a1.apps.googleusercontent.com"; 

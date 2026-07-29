@@ -121,13 +121,13 @@ export default function AdminSupport() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
+    <div className="h-screen bg-gray-50 text-gray-900 flex flex-col overflow-hidden">
       <AdminNavbar active="support" />
 
-      <main className="flex-1 flex flex-col max-w-7xl mx-auto w-full px-4 py-6 h-[calc(100vh-80px)]">
+      <main className="flex-1 flex flex-col max-w-7xl mx-auto w-full px-4 py-6 overflow-hidden">
         <h1 className="text-3xl font-bold text-gray-900 mb-6">Support Dashboard</h1>
 
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 flex flex-1 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 flex flex-1 overflow-hidden min-h-0">
           
           {/* LEFT SIDEBAR */}
           <div className={`w-full md:w-80 border-r border-gray-200 bg-gray-50 flex flex-col ${selectedUser ? 'hidden md:flex' : 'flex'}`}>
@@ -178,7 +178,7 @@ export default function AdminSupport() {
           </div>
 
           {/* RIGHT SIDE: Chat Window */}
-          <div className={`flex-1 flex flex-col bg-white ${!selectedUser ? 'hidden md:flex' : 'flex'}`}>
+          <div className={`flex-1 flex flex-col bg-white ${!selectedUser ? 'hidden md:flex' : 'flex'} min-w-0`}>
             {selectedUser ? (
               <>
                 {/* Chat Header */}

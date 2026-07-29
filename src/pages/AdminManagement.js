@@ -14,6 +14,8 @@ export default function AdminManagement() {
   const AVAILABLE_PERMISSIONS = ['stats', 'categories', 'products', 'orders', 'accounts', 'support', 'vouchers','config',"showProducts"];
   const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';;
 
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     fetchAdmins();
   }, []);
@@ -22,8 +24,10 @@ export default function AdminManagement() {
     try {
       const res = await axios.get(`${BASE_URL}/api/admin`);
       setAdmins(res.data);
+      setError(null);
     } catch (error) {
       console.error(error);
+      setError(error.response?.data?.message || "Failed to fetch admins. Make sure you have the correct permissions.");
     }
   };
 
@@ -80,6 +84,12 @@ export default function AdminManagement() {
 
       <main className="max-w-6xl mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold mb-8">Admin Management</h1>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl mb-6 font-semibold">
+            {error}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           
@@ -150,7 +160,7 @@ export default function AdminManagement() {
                     <li key={admin.id} className="py-4 flex justify-between items-center">
                       <div>
                         <p className="font-bold">{admin.username}</p>
-                        <p className="text-xs text-gray-500">{admin.permissions.join(', ') || 'No Permissions'}</p>
+                        <p className="text-xs text-gray-500">{admin.permissions?.join(', ') || 'No Permissions'}</p>
                       </div>
                       <button onClick={() => deleteAdmin(admin.id)} className="text-red-500 font-bold text-sm hover:underline">Delete</button>
                     </li>

@@ -5,6 +5,7 @@ import AdminNavbar from '../components/AdminNavbar';
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('unverified');
   const [zoomedImage, setZoomedImage] = useState(null);
   
@@ -22,8 +23,10 @@ export default function AdminOrders() {
     try {
       const response = await axios.get(API_URL);
       setOrders(response.data);
+      setError(null);
     } catch (error) {
       console.error('Error fetching orders:', error);
+      setError(error.response?.data?.message || 'Failed to fetch orders. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -84,6 +87,7 @@ export default function AdminOrders() {
   const deliveredOrders = orders.filter(o => o.status === 'Delivered');
 
   let currentOrders = [];
+  if (activeTab === 'all') currentOrders = orders;
   if (activeTab === 'unverified') currentOrders = unverifiedOrders;
   if (activeTab === 'processed') currentOrders = processedOrders;
   if (activeTab === 'delivered') currentOrders = deliveredOrders;
@@ -131,6 +135,9 @@ export default function AdminOrders() {
         <h1 className="text-4xl font-bold text-gray-900 mb-8">Manage Orders</h1>
 
         <div className="flex space-x-4 mb-8 border-b border-gray-200 pb-1 overflow-x-auto">
+          <button onClick={() => setActiveTab('all')} className={`pb-3 px-4 text-lg font-bold transition-colors border-b-4 whitespace-nowrap ${activeTab === 'all' ? 'border-purple-500 text-purple-600' : 'border-transparent text-gray-400 hover:text-gray-600'}`}>
+            All <span className="bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded-full ml-2">{orders.length}</span>
+          </button>
           <button onClick={() => setActiveTab('unverified')} className={`pb-3 px-4 text-lg font-bold transition-colors border-b-4 whitespace-nowrap ${activeTab === 'unverified' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-400 hover:text-gray-600'}`}>
             Unverified <span className="bg-orange-100 text-orange-600 text-xs px-2 py-1 rounded-full ml-2">{unverifiedOrders.length}</span>
           </button>
@@ -141,6 +148,12 @@ export default function AdminOrders() {
             Delivered <span className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full ml-2">{deliveredOrders.length}</span>
           </button>
         </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl mb-6 font-semibold">
+            {error}
+          </div>
+        )}
 
         {loading ? (
           <div className="text-center py-20">Loading orders...</div>

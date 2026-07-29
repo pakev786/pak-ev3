@@ -36,16 +36,20 @@ import AdminBranches from './pages/AdminBranches';
 // Configure axios interceptor for Authorization headers
 axios.interceptors.request.use(
   (config) => {
-    // Check for admin user
-    const adminStr = localStorage.getItem('adminUser');
-    if (adminStr) {
-      const admin = JSON.parse(adminStr);
-      if (admin.token) {
-        config.headers.Authorization = `Bearer ${admin.token}`;
+    const isDashboard = window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/showProducts');
+    
+    if (isDashboard) {
+      // Check for admin user
+      const adminStr = localStorage.getItem('adminUser');
+      if (adminStr) {
+        const admin = JSON.parse(adminStr);
+        if (admin.token) {
+          config.headers.Authorization = `Bearer ${admin.token}`;
+        }
       }
     } else {
       // Check for regular user
-      const userStr = localStorage.getItem('user');
+      const userStr = localStorage.getItem('userInfo');
       if (userStr) {
         const user = JSON.parse(userStr);
         if (user.token) {

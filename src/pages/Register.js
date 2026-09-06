@@ -5,6 +5,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import Navbar from '../components/Navbar';
 import { useCart } from '../context/CartContext';
 
+import { generateStrongPassword as makeStrongPassword } from '../utils/password';
 export default function Register() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -32,11 +33,8 @@ export default function Register() {
     return Object.values(checks).every(Boolean);
   };
 
-  const generateStrongPassword = () => {
-    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
-    let pass = "A1!abcdef";
-    for (let i = 0; i < 6; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
-    const finalPass = pass.split('').sort(() => 0.5 - Math.random()).join('').slice(0, 12);
+    const generateStrongPassword = () => {
+    const finalPass = makeStrongPassword();
     setFormData(prev => ({ ...prev, password: finalPass }));
     validatePassword(finalPass);
   };

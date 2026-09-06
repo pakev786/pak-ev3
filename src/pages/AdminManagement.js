@@ -106,8 +106,9 @@ export default function AdminManagement() {
                 required
               />
               <input 
-                type="text" 
-                placeholder="Password" 
+                type="password" 
+                placeholder="Password (min 8 chars)"
+                minLength={8}
                 className="w-full p-3 border rounded-xl"
                 value={newPassword}
                 onChange={e => setNewPassword(e.target.value)}
@@ -142,7 +143,8 @@ export default function AdminManagement() {
               <form onSubmit={updateSuperPassword} className="flex gap-2">
                 <input 
                   type="password" 
-                  placeholder="New SuperAdmin Password" 
+                  placeholder="New SuperAdmin Password (min 8 chars)"
+                  minLength={8} 
                   className="flex-1 p-3 border rounded-xl"
                   value={superPassword}
                   onChange={e => setSuperPassword(e.target.value)}

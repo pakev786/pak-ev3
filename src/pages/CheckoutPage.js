@@ -128,8 +128,6 @@ export default function CheckoutPage() {
     codPayable = 0;
   }
 
-  const totalCost = onlinePayable + codPayable;
-  const maxDeliveryTime = cartItems.reduce((max, item) => Math.max(max, item.deliveryTimeMax || 0), 0);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -174,13 +172,12 @@ export default function CheckoutPage() {
 
     setLoading(true);
 
+    // Amounts are recomputed and enforced by the server from the product
+    // catalogue; these fields only describe *what* is being ordered.
     const formData = new FormData();
-    formData.append('user', user.id);
-    formData.append('totalCost', totalCost);
-    formData.append('onlinePaid', onlinePayable);
-    formData.append('codAmount', codPayable);
     formData.append('bankAccount', selectedBank);
-    formData.append('deliveryTime', maxDeliveryTime);
+    formData.append('paymentMethod', paymentMethod);
+    if (appliedVoucher?.code) formData.append('voucherCode', appliedVoucher.code);
     formData.append('paymentScreenshot', screenshot);
     formData.append('recipientName', recipientName);
     formData.append('shippingAddress', shippingAddress);
@@ -189,9 +186,7 @@ export default function CheckoutPage() {
     
     const productData = cartItems.map(item => ({
       product: item.id,
-      quantity: item.quantity,
-      title: item.title,
-      price: item.price
+      quantity: item.quantity
     }));
     formData.append('products', JSON.stringify(productData));
 

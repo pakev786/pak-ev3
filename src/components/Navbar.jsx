@@ -74,6 +74,7 @@ const Navbar = () => {
     { name: 'EV Calculator', path: '/ev-calculator' },
     { name: 'Load Calculator', path: '/load-calculator' },
     { name: 'Branches', path: '/branches' },
+    { name: 'My Apps', path: '/my-apps' },
     { name: 'About Us', path: '/about-us' }
   ];
 

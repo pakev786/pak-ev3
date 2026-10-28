@@ -12,6 +12,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import SearchPage from './pages/SearchPage';
 import BranchesPage from './pages/BranchesPage';
 import AboutUs from './pages/AboutUs';
+import MyApps from './pages/MyApps';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import ProfilePage from './pages/ProfilePage';
@@ -84,6 +85,7 @@ export default function App() {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/branches" element={<BranchesPage />} />
             <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/my-apps" element={<MyApps />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<ProfilePage />} />

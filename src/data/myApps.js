@@ -49,7 +49,7 @@ const myApps = [
     description: 'Receives repair and exchange items coming back from customers.',
     logo: '/apps/logistics.png',
     downloads: [
-      { label: 'Download APK', url: 'https://pub-31d8ce6f039f43919684e660ddcc543c.r2.dev/logistics-v1.0.0.apk' },
+      { label: 'Download APK', url: 'https://pub-31d8ce6f039f43919684e660ddcc543c.r2.dev/Logistics-v1.0.0.apk' },
     ],
   },
   {
